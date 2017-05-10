@@ -1,0 +1,18 @@
+						{
+							"value": 
+							[
+								{
+									"attrib": "a",
+									"value": "100"
+								},
+								{
+									"attrib": "b",
+									"value": "151"
+								},
+								{
+									"attrib": "c",
+									"value": "252"
+								}
+
+							]
+						}
