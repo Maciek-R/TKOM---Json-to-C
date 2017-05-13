@@ -249,16 +249,3 @@ bool isCharOrDigit(char x)
 
 }
 */
-bool nextChar()
-{
-	
-		++i;
-		if (i < test.length()) {
-			c = test[i];
-			return true;
-		}
-		else {
-			return false;
-		}
-	
-}

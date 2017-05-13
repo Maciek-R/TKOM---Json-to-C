@@ -4,7 +4,10 @@
 
 ObjectManager::ObjectManager()
 {
-	
+	declaredSimpleTypes.push_back("int");
+	declaredSimpleTypes.push_back("double");
+	declaredSimpleTypes.push_back("float");
+	declaredSimpleTypes.push_back("string");
 }
 
 void ObjectManager::addArray()
@@ -14,6 +17,15 @@ void ObjectManager::addArray()
 void ObjectManager::setType(char* type)
 {
 	models[models.size()-1]->setType(type);
+	for (unsigned i = 0; i < declaredSimpleTypes.size(); ++i)
+	{
+		if (declaredSimpleTypes[i] == type)
+		{
+			models[models.size() - 1]->setSimpleType(true);
+			return;
+		}
+	}
+	models[models.size() - 1]->setSimpleType(false);
 }
 void ObjectManager::setName(char* name)
 {
@@ -53,6 +65,10 @@ void ObjectManager::setVariableData(char* data)
 {
 	models[models.size() - 1]->setVariableData(data);
 }
+bool ObjectManager::isSimpleType()
+{
+	return models[models.size() - 1]->isSimpleType();
+}
 
 
 void ObjectManager::writeAll()
@@ -65,4 +81,23 @@ void ObjectManager::writeAll()
 	}
 	
 	
+}
+
+bool ObjectManager::checkIfTypeIsExisting(std::string type)
+{
+	for (unsigned i = 0; i < declaredSimpleTypes.size(); ++i)
+	{
+		if (declaredSimpleTypes[i] == type) 
+			return true;
+	}
+	for (unsigned i = 0; i < declaredOwnTypes.size(); ++i)
+	{
+		if (declaredOwnTypes[i] == type)
+			return true;
+	}
+	return false;
+}
+void ObjectManager::addNewType(std::string type)
+{
+	declaredOwnTypes.push_back(type);
 }

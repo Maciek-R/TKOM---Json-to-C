@@ -19,6 +19,7 @@ private:
 
 	//przez variable
 	char data[32];
+	bool simpleType;
 public:
 	enum Typ { Array, Structure, Var };
 	Model::Typ typ;
@@ -35,6 +36,8 @@ public:
 	void setStructFieldType(char*);
 
 	void setVariableData(char*);
+	void setSimpleType(bool);
+	bool isSimpleType();
 
 	void write();
 };

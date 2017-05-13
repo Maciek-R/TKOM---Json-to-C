@@ -44,6 +44,14 @@ void Model::setVariableData(char* data)
 {
 	strncpy_s(this->data, data, 32);
 }
+void Model::setSimpleType(bool b)
+{
+	simpleType = b;
+}
+bool Model::isSimpleType()
+{
+	return simpleType;
+}
 
 
 
@@ -60,18 +68,22 @@ void Model::write()
 	}
 	else if (typ == Model::Typ::Structure)
 	{
-		std::cout << Name << std::endl;
+		std::cout << "STRUKTURA:\t" << Name << std::endl;
 		for (unsigned i = 0; i < fieldNames.size(); ++i)
 		{
-			std::cout << "\t" << fieldNames[i] << std::endl;
-			std::cout << "\t" << fieldTypes[i] << std::endl;
+			std::cout << "\tNAME:\t" << fieldNames[i] << std::endl;
+			std::cout << "\tTYPE:\t" << fieldTypes[i] << std::endl;
 		}
 	}
 	else if (typ == Model::Typ::Var)
 	{
-		std::cout << Type << std::endl;
-		std::cout << Name << std::endl;
+		if(simpleType)
+			std::cout << "ZMIENNA TYPU PROSTEGO" << std::endl;
+		else
+			std::cout << "ZMIENNA TYPU ZDEFINIOWANEGO" << std::endl;
+		std::cout << "\tTYPE:\t" << Type << std::endl;
+		std::cout << "\tNAME:\t" << Name << std::endl;
 		
-		std::cout << data << std::endl;
+		std::cout << "\tDATA:\t" << data << std::endl;
 	}
 }

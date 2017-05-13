@@ -6,6 +6,7 @@
 #include <vector>
 #include "Model.h"
 #include "Array.h"
+#include <string>
 //#include "Var.h"
 //#include "Structure.h"
 
@@ -14,6 +15,8 @@ class ObjectManager
 {
 private:
 	std::vector<Model*> models;
+	std::vector<std::string> declaredSimpleTypes;
+	std::vector<std::string> declaredOwnTypes;
 public:
 	ObjectManager();
 
@@ -30,8 +33,12 @@ public:
 
 	void addVariable();
 	void setVariableData(char*);
+	bool isSimpleType();
 
 	void writeAll();
+
+	bool checkIfTypeIsExisting(std::string);
+	void addNewType(std::string);
 };
 
 #endif

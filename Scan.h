@@ -13,6 +13,7 @@ class Scan
 		char spell[32];
 		int tab = 0;
 	public:
+
 		enum Type { Object, Array, Value, String, Number, Comma, EndObject, EndArray, Error };
 		Scan(Source *);
 		Type nextSymbol();
