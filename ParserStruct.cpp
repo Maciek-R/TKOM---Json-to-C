@@ -11,7 +11,7 @@ void Parser::serveStruct()
 	{
 		if (expsString[0] != spell)
 		{
-			cout << "Unexpected word. Expected: \"fields\"" << endl;
+			cout << "Unexpected word("<<spell<<"). Expected: \"fields\"" << endl;
 			_getch();
 			exit(0);
 		}
@@ -28,39 +28,42 @@ void Parser::serveStruct()
 	{
 		if (sym == Scan::Object)	//nie dodaje go do listy exps, bo juz zosta³ sprawdzony
 		{
-			exps.push_back(Scan::String);  expsString.push_back("attrib");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::Comma);
-			exps.push_back(Scan::String); expsString.push_back("type");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::EndObject);
+			tree.add(new SimpleTokenType(Scan::String));  expsString.push_back("attrib"); cout << "dodano" << endl;
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::Comma));
+			tree.add(new SimpleTokenType(Scan::String));  expsString.push_back("type");
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::EndObject));
 
+			tree.add(new ComplexTokenType());		// to jest wa¿ne, definiujemy ze coœ mo¿e tu byæ, ale nie musi
 			expected = Expected::WordAttrib;
+			
 		}
-		else if (sym == Scan::Comma)
+		else if (sym == Scan::Comma)	// to chyba do wyrzucenia
 		{
-			exps.push_back(Scan::Object);
-			exps.push_back(Scan::String);  expsString.push_back("attrib");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::Comma);
-			exps.push_back(Scan::String); expsString.push_back("type");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::EndObject);
+			cout << "asdasdasdasdasdasdasdasd" << endl;
+			tree.add(new SimpleTokenType(Scan::Object));
+			tree.add(new SimpleTokenType(Scan::String));  expsString.push_back("attrib");
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::Comma));
+			tree.add(new SimpleTokenType(Scan::String)); expsString.push_back("type");
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::EndObject));
 
 			expected = Expected::WordAttrib;
 		}
 		else if (sym == Scan::EndArray)
 		{
-			exps.push_back(Scan::EndObject);
+			//exps.push_back(Scan::EndObject);
 			vartype = VARTYPE::None;
 		}
 		else
 		{
-			cout << "Unexpected token. Expected: '{', ',', or ']' " << endl;
+			cout << "Unexpected token("; write(sym); cout <<"). Expected: '{', ',', or ']' " << endl;
 			_getch();
 			exit(0);
 		}
@@ -106,7 +109,7 @@ void Parser::serveStruct()
 		if (objectManager.checkIfTypeIsExisting(spell))
 		{
 			objectManager.setStructFieldType(spell);
-			expected = Expected::Fields;
+			expected = Expected::NextField;
 		}
 		else 
 		{

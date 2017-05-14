@@ -4,24 +4,24 @@ Parser::Parser(Scan * scan)
 {
 	this->scan = scan;
 
-	exps.push_back(Scan::Object);
+	//exps.push_back(Scan::Object);
 }
 
 void Parser::start()
 {
 	nexts();
-	while (sym != Scan::Error) {
+	while (sym != Scan::Type::Error) {
 
 		switch (sym) {
-		case Scan::Object:		setSpaces();	++tab;			cout << "Object" << endl;		break;
-		case Scan::Array:		setSpaces();	++tab;			cout << "Array" << endl;		break;
-		case Scan::Value:		setSpaces();					cout << "Value" << endl;		break;
-		case Scan::String:		setSpaces();					cout << "String" << " " << spell << endl;		break;
-		case Scan::Number:		setSpaces();					cout << "Number " << " " << spell << endl;		break;
-		case Scan::Comma:		setSpaces();					cout << "Comma" << endl;		break;
-		case Scan::Error:		setSpaces();					cout << "Error" << endl;		break;
-		case Scan::EndObject:	--tab;			setSpaces();	cout << "EndObject" << endl;	break;
-		case Scan::EndArray:	--tab;			setSpaces();	cout << "EndArray" << endl;		break;
+		case Scan::Type::Object:		setSpaces();	++tab;			cout << "Object" << endl;		break;
+		case Scan::Type::Array:		setSpaces();	++tab;			cout << "Array" << endl;		break;
+		case Scan::Type::Value:		setSpaces();					cout << "Value" << endl;		break;
+		case Scan::Type::String:		setSpaces();					cout << "String" << " " << spell << endl;		break;
+		case Scan::Type::Number:		setSpaces();					cout << "Number " << " " << spell << endl;		break;
+		case Scan::Type::Comma:		setSpaces();					cout << "Comma" << endl;		break;
+		case Scan::Type::Error:		setSpaces();					cout << "Error" << endl;		break;
+		case Scan::Type::EndObject:	--tab;			setSpaces();	cout << "EndObject" << endl;	break;
+		case Scan::Type::EndArray:	--tab;			setSpaces();	cout << "EndArray" << endl;		break;
 		}
 		nexts();
 	}
@@ -31,45 +31,118 @@ void Parser::start()
 
 void Parser::nexts()
 {
-	sym = scan->nextSymbol();
-
-	while (!exps.empty())
+	
+	while (tree.isAnyTokenLeft())
 	{
-		if (exps[0] != sym) {
-			cout << "Unexpected token. Expected: " << exps[0] << endl;
+		sym = scan->nextSymbol();
+		if (sym == Scan::Error)
+		{
+			cout << "Generacja kodu przebiegla pomyslnie!" << endl << endl;
+			_getch();
+			return;
+			//exit(0);
+		}
+		Scan::Type tmp = tree.getNext();
+		write(tmp);
+		cout << endl;
+
+		if (vartype == VARTYPE::None)
+		{
+			if (tmp == Scan::Type::ComplexEmpty)
+			{
+				serveNewType();
+			}
+			else if(tmp != sym)
+			{
+				error(tmp, sym);
+				_getch();
+				exit(0);
+			}
+		}
+		else if (vartype == VARTYPE::Struct)
+		{
+			if (expected == Expected::NextField)
+			{
+				if (sym == Scan::Comma)
+				{
+					sym = scan->nextSymbol();
+					expected = Expected::Fields;
+					serveStruct();
+				}
+				
+			}
+
+			else if (sym != Scan::String)
+			{
+				if (tmp != Scan::ComplexEmpty)
+				{
+					if (sym != tmp)
+					{
+						error(tmp, sym);
+						_getch();
+						exit(0);
+					}
+				}
+				else 
+				{
+					serveStruct();
+				}
+				
+			}
+			else {
+				serveStruct();
+			}
+		}
+		else if (vartype == VARTYPE::Var)
+		{
+
+		}
+
+
+
+		/*if (tmp == Scan::Type::ComplexEmpty && vartype != VARTYPE::None)
+		{
+			break;
+		}
+		else if (tmp == Scan::Type::ComplexEmpty)	//oznacza, ¿e potrzebuje info jakiego typu bedzie to obiekt(sequenceName, array, variable)
+		{
+				serveNewType();	
+			sym = scan->nextSymbol();
+		}
+		else if (tmp != sym)
+		{
+			error(tmp, sym);
 			_getch();
 			exit(0);
 		}
 		else
 		{
-			Scan::Type tmp = exps[0];
-			exps.erase(exps.begin());	//zawiera kolejke tokenów, które powinny pojawiaæ siê w odpowiedniej kolejnoœci
-			if (tmp == Scan::String)	//przepuszcza Stringi w celu ich analizy
+			if (tmp == Scan::Type::String)	//przepuszcza Stringi w celu ich analizy
 				break;
 
-			sym = scan->nextSymbol();
-		}
+			//sym = scan->nextSymbol();
+		}*/
 	}
-
-	if (vartype == VARTYPE::None)
-		serveNewType();
-	else if (vartype == VARTYPE::Array)
+	
+	//if (vartype == VARTYPE::None)
+	//	serveNewType();
+	/*if (vartype == VARTYPE::Array)
 		serveArray();
 	else if (vartype == VARTYPE::Struct)
 		serveStruct();
 	else if (vartype == VARTYPE::Var)
-		serveVar();
+		serveVar();*/
 }
 
 
 
 void Parser::serveNewType()
 {
-	if (sym == Scan::Type::String)
-	{
-		spell = scan->getSpell();
+	//if (sym == Scan::Type::ComplexEmpty)
+	//{
 
-		if (strcmp(spell, "array") == 0) {
+		spell = scan->getSpell();
+		/*if (strcmp(spell, "array") == 0) {
 			objectManager.addArray();
 			vartype = VARTYPE::Array;
 			expected = Expected::Type;
@@ -91,21 +164,29 @@ void Parser::serveNewType()
 			exps.push_back(Scan::String);
 			exps.push_back(Scan::EndObject);
 
-		}
-		else if (strcmp(spell, "sequenceName") == 0) {
+		}*/
+		if (strcmp(spell, "sequenceName") == 0) {
 			objectManager.addStructDeclaration();
 			vartype = VARTYPE::Struct;
 			expected = Expected::Type;
-
-			exps.push_back(Scan::Value);
+			
+			tree.add(new SimpleTokenType(Scan::Type::Value));
+			tree.add(new SimpleTokenType(Scan::Type::String));
+			tree.add(new SimpleTokenType(Scan::Type::Comma));
+			tree.add(new SimpleTokenType(Scan::Type::String)); expsString.push_back("fields");
+			tree.add(new SimpleTokenType(Scan::Type::Value));
+			tree.add(new SimpleTokenType(Scan::Type::Array));
+			tree.add(new ComplexTokenType());
+			tree.add(new SimpleTokenType(Scan::Type::EndArray));
+		/*	exps.push_back(Scan::Value);
 			exps.push_back(Scan::String);
 			exps.push_back(Scan::Comma);
 			exps.push_back(Scan::String); expsString.push_back("fields");
 			exps.push_back(Scan::Value);
-			exps.push_back(Scan::Array);
+			exps.push_back(Scan::Array);*/
 		}
 		else if (strcmp(spell, "variable") == 0) {
-			objectManager.addVariable();
+		/*	objectManager.addVariable();
 			vartype = VARTYPE::Var;
 			expected = Expected::Type;
 
@@ -117,7 +198,7 @@ void Parser::serveNewType()
 			exps.push_back(Scan::String);
 			exps.push_back(Scan::Comma);
 			exps.push_back(Scan::String); expsString.push_back("data");
-			exps.push_back(Scan::Value);
+			exps.push_back(Scan::Value);*/
 		}
 		else {
 			cout << "Unexpected word. Expected: sequenceName, array, " << endl;
@@ -146,11 +227,11 @@ void Parser::serveNewType()
 		//
 		
 
-	}
+	/*}
 	else if (sym == Scan::Type::EndArray)
 	{
 		expected = Expected::None;
-	}
+	}*/
 
 }
 void Parser::serveArray()
@@ -262,5 +343,29 @@ void Parser::setSpaces()
 {
 	for (int i = 0; i < tab; ++i) {
 		cout << '\t';
+	}
+}
+void Parser::error(Scan::Type expected, Scan::Type typed)
+{
+	cout << "Unexpected token(";
+	write(typed);
+	cout << ").";
+	cout << "Expected: ";
+	write(expected);
+}
+void Parser::write(Scan::Type tmp)
+{
+	switch (tmp)
+	{
+		case Scan::Object:			cout << "{" ; break;
+		case Scan::Array:			cout << "[" ; break;
+		case Scan::Value:			cout << ":" ; break;
+		case Scan::String:			cout << "String"; break;
+		case Scan::Number:			cout << "Number" ; break;
+		case Scan::Comma:			cout << "," ; break;
+		case Scan::EndObject:		cout << "}" ; break;
+		case Scan::EndArray:		cout << "]" ; break;
+		case Scan::Error:			cout << "error" ; break;
+		case Scan::ComplexEmpty:	cout << "ComplexEmpty" ; break;
 	}
 }

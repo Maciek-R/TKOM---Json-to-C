@@ -2,7 +2,7 @@
 
 void Parser::serveVar()
 {
-	if (expected == Expected::Type)
+/*	if (expected == Expected::Type)
 	{
 		if (objectManager.checkIfTypeIsExisting(spell))
 		{
@@ -64,5 +64,5 @@ void Parser::serveVar()
 		{	
 			
 		}
-	}
+	}*/
 }

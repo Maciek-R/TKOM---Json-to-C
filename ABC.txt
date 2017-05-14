@@ -1,5 +1,19 @@
 			{
-				"variable": "int",
-				"name": "zmienna1",
-				"data": "5"	
+				"sequenceName": "MySeq",	
+				"fields": 					
+					[
+						{
+							"attrib": "a",
+							"type": "int"
+						},
+						{
+							"attrib": "b",
+							"type": "int"
+						},
+						{
+							"attrib": "c",
+							"type": "int"
+						}
+						
+					]
 			}

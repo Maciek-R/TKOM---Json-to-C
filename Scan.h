@@ -14,7 +14,7 @@ class Scan
 		int tab = 0;
 	public:
 
-		enum Type { Object, Array, Value, String, Number, Comma, EndObject, EndArray, Error };
+		enum Type { Object, Array, Value, String, Number, Comma, EndObject, EndArray, Error, ComplexEmpty, END_FILE, None};
 		Scan(Source *);
 		Type nextSymbol();
 		void nextChar();
