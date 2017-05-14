@@ -15,17 +15,19 @@ ComplexTokenType::ComplexTokenType()
 		types.push_back(new SimpleTokenType(Scan::Type::EndObject));
 	}*/
 }
-Scan::Type ComplexTokenType::getNext()
+Scan::Type ComplexTokenType::getNext(TokenType* current)
 {
+	current = this;
 	if (types.empty())
 	{
+		current = this;
 		return Scan::Type::ComplexEmpty;
 	}	
 	while (index != types.size())
 	{
 		if (types[index]->isAnyTokenLeft())
 		{
-			Scan::Type tmp = types[index]->getNext();
+			Scan::Type tmp = types[index]->getNext(current);
 			if (tmp != Scan::Type::None)
 				return tmp;
 		}
@@ -63,4 +65,16 @@ TokenType* ComplexTokenType::next()
 		}
 	}
 	return NULL;
+}
+void ComplexTokenType::write(int x)
+{
+	for (int i = 0; i < x; ++i)
+		cout << "    ";
+
+	cout << "ComplexTokenType" << endl;
+
+	for (unsigned i = 0; i < types.size(); ++i)
+	{
+		types[i]->write(x+1);
+	}
 }

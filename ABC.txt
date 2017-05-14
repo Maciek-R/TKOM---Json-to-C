@@ -18,37 +18,9 @@
 							"attrib": "c",
 							"type": "int"
 						}
+						
 					]
-			},
-			{
-				"array": "int",
-				"name" : "myIntArray",
-				"values":
-					[
-						{
-							"value": "80"
-						},
-						{
-							"value": "81"
-						},
-						{
-							"value": "81"
-						}
-
-					]	
-			},
-			{
-			
-				"variable": "int",
-				"name": "zmienna1",
-				"data": "5"		
-			},
-			{
-			
-				"variable": "int",
-				"name": "zmienna2",
-				"data": "1"		
-			},
+			}
 			
 		]
 }	

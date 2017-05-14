@@ -15,10 +15,13 @@ private:
 
 	TokenType * getCurrentComplexTokenType();
 public:
+	ComplexTokenType* current;	//current ComplexTokenType in tree
 	Tree();
 	Scan::Type getNext();
 	bool isAnyTokenLeft();
 	void add(TokenType *);
+
+	void write();
 };
 
 #endif // !TREE_H

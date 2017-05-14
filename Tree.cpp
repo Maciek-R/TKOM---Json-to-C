@@ -19,11 +19,12 @@ Tree::Tree()
 
 Scan::Type Tree::getNext()
 {
+	current = NULL;
 	while (index != tokens.size())
 	{
 		if (tokens[index]->isAnyTokenLeft())
 		{
-			Scan::Type tmp = tokens[index]->getNext();
+			Scan::Type tmp = tokens[index]->getNext(current);
 			if (tmp != Scan::Type::None)
 				return tmp;
 		}
@@ -57,4 +58,14 @@ TokenType* Tree::getCurrentComplexTokenType()
 				}
 	}
 	return NULL;
+}
+
+void Tree::write()
+{
+	cout << "TREE" << endl;
+
+	for (unsigned i = 0; i < tokens.size(); ++i)
+	{
+		tokens[i]->write(-1);
+	}
 }

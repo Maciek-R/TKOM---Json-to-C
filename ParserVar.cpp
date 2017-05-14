@@ -11,9 +11,9 @@ void Parser::serveVar()
 
 			if (!objectManager.isSimpleType())
 			{
-				tree.add(new SimpleTokenType(Scan::Type::Array));
-				tree.add(new ComplexTokenType());
-				tree.add(new SimpleTokenType(Scan::Type::EndArray));
+				tree.current->add(new SimpleTokenType(Scan::Type::Array));
+				tree.current->add(new ComplexTokenType());
+				tree.current->add(new SimpleTokenType(Scan::Type::EndArray));
 			}
 		}
 		else

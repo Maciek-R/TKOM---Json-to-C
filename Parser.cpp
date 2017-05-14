@@ -25,8 +25,9 @@ void Parser::start()
 		}
 		nexts();
 	}
-
 	objectManager.writeAll();
+
+	tree.write();
 }
 
 void Parser::nexts()
@@ -43,8 +44,8 @@ void Parser::nexts()
 			//exit(0);
 		}
 		Scan::Type tmp = tree.getNext();
-		write(tmp);
-		cout << endl;
+		//write(tmp);
+		//cout << endl;
 
 		if (vartype == VARTYPE::None)
 		{

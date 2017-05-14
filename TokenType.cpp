@@ -11,7 +11,7 @@ bool TokenType::isSimpleToken()
 }
 void TokenType::add(TokenType *)
 {
-
+	
 }
 TokenType* TokenType::next()
 {

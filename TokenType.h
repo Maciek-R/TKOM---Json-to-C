@@ -15,8 +15,10 @@ public:
 
 	virtual void add(TokenType *);
 	virtual bool isAnyTokenLeft();
-	virtual Scan::Type getNext() = 0;
+	virtual Scan::Type getNext(TokenType*) = 0;
 	virtual TokenType* next();
+
+	virtual void write(int) = 0;
 };
 
 #endif

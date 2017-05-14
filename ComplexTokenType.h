@@ -12,11 +12,13 @@ private:
 	std::vector<TokenType*> types;
 public:
 	ComplexTokenType();
-	Scan::Type getNext();
+	Scan::Type getNext(TokenType*);
 
 	bool isAnyTokenLeft();
 	void add(TokenType*);
 	TokenType* next();
+
+	void write(int x);
 };
 
 #endif 
