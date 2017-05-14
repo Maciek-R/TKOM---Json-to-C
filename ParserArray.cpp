@@ -93,7 +93,8 @@ void Parser::serveArray()
 
 	else if (expected == Expected::DataValue)
 	{
-		objectManager.setVariableData(spell);
+		//objectManager.setVariableData(spell);
+		objectManager.addArrayValue(spell);
 		expected = Expected::NextDataValue;
 	}
 

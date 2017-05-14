@@ -105,7 +105,28 @@ void Parser::nexts()
 		}
 		else if (vartype == VARTYPE::Var)
 		{
-			if (sym != Scan::String)
+			if (expected == Expected::NextDataValue && !objectManager.isSimpleType())
+			{
+				if (sym == Scan::Comma)
+				{
+					sym = scan->nextSymbol();
+					expected = Expected::Data;
+					serveArray();
+				}
+				else if (sym == Scan::Object)
+				{
+					cout << "Expected ','" << endl;
+					_getch();
+					exit(0);
+				}
+				else if (sym == Scan::EndArray)
+				{
+					sym = scan->nextSymbol();
+					vartype = VARTYPE::None;
+				}
+
+			}
+			else if (sym != Scan::String)
 			{
 				if (tmp != Scan::ComplexEmpty)
 				{
@@ -202,6 +223,7 @@ void Parser::serveNewType()
 		}
 		else if (strcmp(spell, "variable") == 0) {
 			objectManager.addVariable();
+			cout << "asdasdasjdhahfdaskhdjkashdnsaljfnsdfsdfsdnfksdnfkndskfndskkd" << endl;
 			vartype = VARTYPE::Var;
 			expected = Expected::Type;
 
@@ -214,8 +236,8 @@ void Parser::serveNewType()
 			tree.add(new SimpleTokenType(Scan::Comma));
 			tree.add(new SimpleTokenType(Scan::String)); expsString.push_back("data");
 			tree.add(new SimpleTokenType(Scan::Value));
-			tree.add(new SimpleTokenType(Scan::String));
-			//tree.add(new ComplexTokenType());
+			//tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new ComplexTokenType());
 		}
 		else if (strcmp(spell, "array") == 0) {
 			objectManager.addArray();

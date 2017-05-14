@@ -3,6 +3,24 @@
 	"module":
 		[
 			{
+				"sequenceName": "MySeq",	
+				"fields": 					
+					[
+						{
+							"attrib": "a",
+							"type": "int"
+						},
+						{
+							"attrib": "b",
+							"type": "int"
+						},
+						{
+							"attrib": "c",
+							"type": "int"
+						}
+					]
+			},
+			{
 				"array": "int",
 				"name" : "myIntArray",
 				"values":
@@ -12,60 +30,26 @@
 						},
 						{
 							"value": "81"
-						}
-						
-					]	
-			},
-			{
-				"sequenceName": "MySeq",
-				"fields": 				
-					[
-						{
-							"attrib": "a",
-							"type": "int"
-						},
-						{
-							"attrib": "b",
-							"type": "int"
-						},
-						{
-							"attrib": "c",
-							"type": "int"
-						}
-					]
-			},
-			{
-				"sequenceName": "MySeq2",
-				"fields": 				
-					[
-						{
-							"attrib": "a",
-							"type": "int"
-						},
-						{
-							"attrib": "b",
-							"type": "int"
-						},
-						{
-							"attrib": "c",
-							"type": "int"
-						}
-					]
-			},
-			{
-				"array": "int",
-				"name" : "myIntArray2",
-				"values":
-					[
-						{
-							"value": "90"
 						},
 						{
 							"value": "81"
 						}
-						
+
 					]	
-			}
+			},
+			{
+			
+				"variable": "int",
+				"name": "zmienna1",
+				"data": "5"		
+			},
+			{
+			
+				"variable": "int",
+				"name": "zmienna2",
+				"data": "1"		
+			},
+			
 		]
 }	
 			

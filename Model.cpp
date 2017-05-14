@@ -42,8 +42,11 @@ void Model::setStructFieldType(char* structFieldType)
 
 void Model::setVariableData(char* data)
 {
-	//strncpy_s(this->data, data, 32);
-	values.push_back(data);
+	if (simpleType)
+		strncpy_s(this->data, data, 32);
+	else
+		addValue(data);
+	//values.push_back(data);
 }
 void Model::setSimpleType(bool b)
 {
@@ -85,7 +88,13 @@ void Model::write()
 			std::cout << "ZMIENNA TYPU ZDEFINIOWANEGO" << std::endl;
 		std::cout << "\tTYPE:\t" << Type << std::endl;
 		std::cout << "\tNAME:\t" << Name << std::endl;
-		
-		std::cout << "\tDATA:\t" << data << std::endl;
+
+		if (simpleType)
+			std::cout << "\tDATA:\t" << data << std::endl;
+		else {
+			std::cout << "\tDATA:\t" << std::endl;
+			for(unsigned i=0; i<values.size(); ++i)
+				std::cout << "\t\t" << values[i] << std::endl;
+		}
 	}
 }

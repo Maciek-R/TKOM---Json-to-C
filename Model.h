@@ -9,15 +9,14 @@ class Model
 {
 private:
 	char Type[32];
-	char Name[32];//nazwa tablicy albo nazwa typu struktury
-	std::vector<std::string> values;
+	char Name[32];//nazwa tablicy, nazwa typu struktury lub nazwa zmiennej
+	std::vector<std::string> values;// wartoœci tablicy lub zmiennej strukturalnej
 	
 	//uzywane przez strukture
 	std::vector<std::string> fieldNames;
 	std::vector<std::string> fieldTypes;
-	
 
-	//przez variable
+	//przez variable dla simple
 	char data[32];
 	bool simpleType;
 public:

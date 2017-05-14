@@ -5,6 +5,7 @@ void Parser::serveStruct()
 	if (expected == Expected::Type)
 	{
 		objectManager.setStructTypeName(spell);
+		objectManager.addNewType(spell);
 		expected = Expected::WordFields;
 	}
 	else if (expected == Expected::WordFields)
