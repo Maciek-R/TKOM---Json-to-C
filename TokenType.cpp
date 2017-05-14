@@ -9,9 +9,13 @@ bool TokenType::isSimpleToken()
 {
 	return simpleToken;
 }
-void TokenType::add(TokenType *)
+bool TokenType::add(TokenType *)
 {
-	
+	return true;
+}
+bool TokenType::down()
+{
+	return true;
 }
 TokenType* TokenType::next()
 {

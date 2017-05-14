@@ -2,19 +2,6 @@
 
 Tree::Tree()
 {
-	tokens.push_back(new SimpleTokenType(Scan::Object));
-	tokens.push_back(new SimpleTokenType(Scan::String));
-	tokens.push_back(new SimpleTokenType(Scan::Value));
-	tokens.push_back(new SimpleTokenType(Scan::String));
-	tokens.push_back(new SimpleTokenType(Scan::Comma));
-	tokens.push_back(new SimpleTokenType(Scan::String));
-	tokens.push_back(new SimpleTokenType(Scan::Value));
-	tokens.push_back(new SimpleTokenType(Scan::Array));
-	tokens.push_back(new ComplexTokenType());
-
-
-	tokens.push_back(new SimpleTokenType(Scan::EndArray));
-	tokens.push_back(new SimpleTokenType(Scan::EndObject));
 }
 
 Scan::Type Tree::getNext()
@@ -42,10 +29,46 @@ bool Tree::isAnyTokenLeft()
 }
 void Tree::add(TokenType * tokenType)
 {
-	TokenType * current = getCurrentComplexTokenType();
-	
-	current->add(tokenType);
+	while (index < tokens.size())
+	{
+		if (!tokens[index]->isSimpleToken())
+		{
+			if (tokens[index]->add(tokenType))
+				return;
+		}
+		++index;
+	}
+	tokens.push_back(tokenType);
 }
+void Tree::down()
+{
+	int x = hasAnyComplexType();
+	if (x != -1)
+	{
+		if (tokens[x]->down())
+		{
+			++index;
+			tokens.push_back(new SimpleTokenType(Scan::EndObject));
+			return;
+		}
+		else {
+			return;
+		}
+	}
+	else {
+		return;
+	}
+}
+int Tree::hasAnyComplexType()
+{
+	for (int i = index; i < tokens.size(); ++i)
+	{
+		if (!tokens[i]->isSimpleToken())
+			return i;
+	}
+	return -1;
+}
+
 
 TokenType* Tree::getCurrentComplexTokenType()
 {
@@ -66,6 +89,6 @@ void Tree::write()
 
 	for (unsigned i = 0; i < tokens.size(); ++i)
 	{
-		tokens[i]->write(-1);
+		tokens[i]->write(0);
 	}
 }

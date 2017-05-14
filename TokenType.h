@@ -13,7 +13,8 @@ public:
 	TokenType();
 	bool isSimpleToken();
 
-	virtual void add(TokenType *);
+	virtual bool add(TokenType *);
+	virtual bool down();
 	virtual bool isAnyTokenLeft();
 	virtual Scan::Type getNext(TokenType*) = 0;
 	virtual TokenType* next();

@@ -14,12 +14,14 @@ private:
 	bool anyTokenLeft = true;
 
 	TokenType * getCurrentComplexTokenType();
+	int hasAnyComplexType();
 public:
 	ComplexTokenType* current;	//current ComplexTokenType in tree
 	Tree();
 	Scan::Type getNext();
 	bool isAnyTokenLeft();
 	void add(TokenType *);
+	void down();
 
 	void write();
 };

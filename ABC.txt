@@ -20,6 +20,54 @@
 						}
 						
 					]
+			},
+			{
+			
+				"variable": "MyInt",
+				"name": "zmienna1",
+				"data": "5"
+				
+			},
+			{
+			
+				"variable": "MyInt",
+				"name": "zmienna2",
+				"data": "159"
+				
+			},
+			{
+				"array": "MyInt",	
+				"name" : "myIntArray",
+				"values":
+					[
+						{
+							"value": "80"
+						},
+						{
+							"value": "81"
+						}
+
+					]	
+			},
+			{								
+				"variable": "MySeq",	
+				"name": "mySeq",
+				"data":
+				[
+					{	
+						"attrib": "a",
+						"value": "10"
+					},
+					{	
+						"attrib": "b",
+						"value": "11"
+					},
+					{	
+						"attrib": "c",
+						"value": "12"
+					}
+				]
+			
 			}
 			
 		]

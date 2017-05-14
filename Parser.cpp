@@ -12,28 +12,47 @@ void Parser::start()
 	nexts();
 	while (sym != Scan::Type::Error) {
 
-		switch (sym) {
-		case Scan::Type::Object:		setSpaces();	++tab;			cout << "Object" << endl;		break;
-		case Scan::Type::Array:		setSpaces();	++tab;			cout << "Array" << endl;		break;
-		case Scan::Type::Value:		setSpaces();					cout << "Value" << endl;		break;
-		case Scan::Type::String:		setSpaces();					cout << "String" << " " << spell << endl;		break;
-		case Scan::Type::Number:		setSpaces();					cout << "Number " << " " << spell << endl;		break;
-		case Scan::Type::Comma:		setSpaces();					cout << "Comma" << endl;		break;
-		case Scan::Type::Error:		setSpaces();					cout << "Error" << endl;		break;
-		case Scan::Type::EndObject:	--tab;			setSpaces();	cout << "EndObject" << endl;	break;
-		case Scan::Type::EndArray:	--tab;			setSpaces();	cout << "EndArray" << endl;		break;
-		}
+		/*switch (sym) {
+			case Scan::Type::Object:		setSpaces();	++tab;			cout << "Object" << endl;		break;
+			case Scan::Type::Array:		setSpaces();	++tab;			cout << "Array" << endl;		break;
+			case Scan::Type::Value:		setSpaces();					cout << "Value" << endl;		break;
+			case Scan::Type::String:		setSpaces();					cout << "String" << " " << spell << endl;		break;
+			case Scan::Type::Number:		setSpaces();					cout << "Number " << " " << spell << endl;		break;
+			case Scan::Type::Comma:		setSpaces();					cout << "Comma" << endl;		break;
+			case Scan::Type::Error:		setSpaces();					cout << "Error" << endl;		break;
+			case Scan::Type::EndObject:	--tab;			setSpaces();	cout << "EndObject" << endl;	break;
+			case Scan::Type::EndArray:	--tab;			setSpaces();	cout << "EndArray" << endl;		break;
+		}*/
 		nexts();
 	}
-	objectManager.writeAll();
+	//objectManager.writeAll();
 
 	tree.write();
 }
 
 void Parser::nexts()
 {
+	sym = scan->nextSymbol();
+	if (sym == Scan::Type::Object)
+	{
+		tree.add(new SimpleTokenType(Scan::Type::Object));
+		tree.add(new ComplexTokenType());
+		
+	}
+	else if (sym == Scan::Type::EndObject)
+		tree.down();
+	else {
+		tree.add(new SimpleTokenType(sym));
+	}
 	
-	while (tree.isAnyTokenLeft())
+
+
+	//if (sym == Scan::Object)
+	//{
+
+	//}
+
+	/*while (tree.isAnyTokenLeft())
 	{
 		sym = scan->nextSymbol();
 		if (sym == Scan::Error)
@@ -191,8 +210,8 @@ void Parser::nexts()
 			}
 		}
 
-
-	}
+		
+	}*/
 }
 
 

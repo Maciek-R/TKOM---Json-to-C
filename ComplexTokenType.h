@@ -10,15 +10,19 @@ class ComplexTokenType: public TokenType
 private:
 	int index = 0;	//index for type's vector
 	std::vector<TokenType*> types;
+
+	int hasAnyComplexType();
 public:
 	ComplexTokenType();
 	Scan::Type getNext(TokenType*);
 
 	bool isAnyTokenLeft();
-	void add(TokenType*);
+	bool add(TokenType*);
+	bool down();
 	TokenType* next();
 
 	void write(int x);
+
 };
 
 #endif 
