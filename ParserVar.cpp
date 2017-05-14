@@ -2,7 +2,7 @@
 
 void Parser::serveVar()
 {
-/*	if (expected == Expected::Type)
+	if (expected == Expected::Type)
 	{
 		if (objectManager.checkIfTypeIsExisting(spell))
 		{
@@ -56,7 +56,6 @@ void Parser::serveVar()
 		if (objectManager.isSimpleType())
 		{
 			objectManager.setVariableData(spell);
-			exps.push_back(Scan::EndObject);
 
 			vartype = VARTYPE::None;
 		}
@@ -64,5 +63,5 @@ void Parser::serveVar()
 		{	
 			
 		}
-	}*/
+	}
 }

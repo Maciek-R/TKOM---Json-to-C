@@ -19,7 +19,7 @@ private:
 	enum class VARTYPE {None, Array, Var, Struct};
 	VARTYPE vartype = VARTYPE::None;
 
-	enum class Expected {None, Type, Name, Value, Values, Fields, StructTypeName, FieldName, FieldType, FieldTypeName, DataValue, Colon, Object, WordName, WordValues, WordValue, WordFields, WordAttrib, WordType, Data, WordData, NextField};
+	enum class Expected {None, Type, Name, Value, Values, Fields, StructTypeName, FieldName, FieldType, FieldTypeName, DataValue, Colon, Object, WordName, WordValues, WordValue, WordFields, WordAttrib, WordType, Data, WordData, NextField, NextDataValue};
 	Expected expected=Expected::None;
 	//std::vector <Scan::Type> exps;
 	Tree tree;

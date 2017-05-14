@@ -69,6 +69,17 @@ void Parser::nexts()
 					expected = Expected::Fields;
 					serveStruct();
 				}
+				else if (sym == Scan::Object)
+				{
+					cout << "Expected ','" << endl;
+					_getch();
+					exit(0);
+				}
+				else if (sym == Scan::EndArray)
+				{
+					sym = scan->nextSymbol();
+					vartype = VARTYPE::None;
+				}
 				
 			}
 
@@ -86,8 +97,7 @@ void Parser::nexts()
 				else 
 				{
 					serveStruct();
-				}
-				
+				}		
 			}
 			else {
 				serveStruct();
@@ -95,81 +105,92 @@ void Parser::nexts()
 		}
 		else if (vartype == VARTYPE::Var)
 		{
+			if (sym != Scan::String)
+			{
+				if (tmp != Scan::ComplexEmpty)
+				{
+					if (sym != tmp)
+					{
+						error(tmp, sym);
+						_getch();
+						exit(0);
+					}
+				}
+				else
+				{
+					serveVar();
+				}
+			}
+			else {
+				serveVar();
+			}
+		}
+		else if (vartype == VARTYPE::Array)
+		{
+			if (expected == Expected::NextDataValue)
+			{
+				if (sym == Scan::Comma)
+				{
+					sym = scan->nextSymbol();
+					expected = Expected::Values;
+					serveArray();
+				}
+				else if (sym == Scan::Object)
+				{
+					cout << "Expected ','" << endl;
+					_getch();
+					exit(0);
+				}
+				else if (sym == Scan::EndArray)
+				{
+					sym = scan->nextSymbol();
+					vartype = VARTYPE::None;
+				}
 
+			}
+			else if (sym != Scan::String)
+			{
+				if (tmp != Scan::ComplexEmpty)
+				{
+					if (sym != tmp)
+					{
+						error(tmp, sym);
+						_getch();
+						exit(0);
+					}
+				}
+				else
+				{
+					serveArray();
+				}
+			}
+			else {
+				serveArray();
+			}
 		}
 
 
-
-		/*if (tmp == Scan::Type::ComplexEmpty && vartype != VARTYPE::None)
-		{
-			break;
-		}
-		else if (tmp == Scan::Type::ComplexEmpty)	//oznacza, ¿e potrzebuje info jakiego typu bedzie to obiekt(sequenceName, array, variable)
-		{
-				serveNewType();	
-			sym = scan->nextSymbol();
-		}
-		else if (tmp != sym)
-		{
-			error(tmp, sym);
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			if (tmp == Scan::Type::String)	//przepuszcza Stringi w celu ich analizy
-				break;
-
-			//sym = scan->nextSymbol();
-		}*/
 	}
-	
-	//if (vartype == VARTYPE::None)
-	//	serveNewType();
-	/*if (vartype == VARTYPE::Array)
-		serveArray();
-	else if (vartype == VARTYPE::Struct)
-		serveStruct();
-	else if (vartype == VARTYPE::Var)
-		serveVar();*/
 }
 
 
 
 void Parser::serveNewType()
 {
-	//if (sym == Scan::Type::ComplexEmpty)
-	//{
+	if (sym == Scan::Object)
+	{
+		tree.add(new ComplexTokenType());
+	
 
+		sym = scan->nextSymbol();
 		spell = scan->getSpell();
-		/*if (strcmp(spell, "array") == 0) {
-			objectManager.addArray();
-			vartype = VARTYPE::Array;
-			expected = Expected::Type;
 
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::Comma);
-			exps.push_back(Scan::String); expsString.push_back("name");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::Comma);
-			exps.push_back(Scan::String); expsString.push_back("values");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::Array);
-
-			exps.push_back(Scan::Object);
-			exps.push_back(Scan::String);  expsString.push_back("value");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::EndObject);
-
-		}*/
 		if (strcmp(spell, "sequenceName") == 0) {
+			cout << "seq" << endl;
 			objectManager.addStructDeclaration();
 			vartype = VARTYPE::Struct;
 			expected = Expected::Type;
-			
+
 			tree.add(new SimpleTokenType(Scan::Type::Value));
 			tree.add(new SimpleTokenType(Scan::Type::String));
 			tree.add(new SimpleTokenType(Scan::Type::Comma));
@@ -178,166 +199,54 @@ void Parser::serveNewType()
 			tree.add(new SimpleTokenType(Scan::Type::Array));
 			tree.add(new ComplexTokenType());
 			tree.add(new SimpleTokenType(Scan::Type::EndArray));
-		/*	exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::Comma);
-			exps.push_back(Scan::String); expsString.push_back("fields");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::Array);*/
 		}
 		else if (strcmp(spell, "variable") == 0) {
-		/*	objectManager.addVariable();
+			objectManager.addVariable();
 			vartype = VARTYPE::Var;
 			expected = Expected::Type;
 
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::Comma);
-			exps.push_back(Scan::String); expsString.push_back("name");
-			exps.push_back(Scan::Value);
-			exps.push_back(Scan::String);
-			exps.push_back(Scan::Comma);
-			exps.push_back(Scan::String); expsString.push_back("data");
-			exps.push_back(Scan::Value);*/
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::Comma));
+			tree.add(new SimpleTokenType(Scan::String)); expsString.push_back("name");
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::Comma));
+			tree.add(new SimpleTokenType(Scan::String)); expsString.push_back("data");
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			//tree.add(new ComplexTokenType());
+		}
+		else if (strcmp(spell, "array") == 0) {
+			objectManager.addArray();
+			vartype = VARTYPE::Array;
+			expected = Expected::Type;
+
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::Comma));
+			tree.add(new SimpleTokenType(Scan::String)); expsString.push_back("name");
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::String));
+			tree.add(new SimpleTokenType(Scan::Comma));
+			tree.add(new SimpleTokenType(Scan::String)); expsString.push_back("values");
+			tree.add(new SimpleTokenType(Scan::Value));
+			tree.add(new SimpleTokenType(Scan::Array));
+			tree.add(new ComplexTokenType());
+			tree.add(new SimpleTokenType(Scan::Type::EndArray));
 		}
 		else {
-			cout << "Unexpected word. Expected: sequenceName, array, " << endl;
+			cout << "Unexpected word. Expected: sequenceName, array, variable" << endl;
 			_getch();
 			exit(0);
 		}
-
-		/*else if (strcmp(spell, "SequenceName") == 0) {
-			objectManager.addStructDeclaration();
-			expected = Expected::StructTypeName;
-		}
-		else if (strcmp(spell, "fields") == 0) {
-			expected = Expected::Fields;
-		}
-		else if (strcmp(spell, "variable") == 0) {
-			expected = Expected::Type;
-			objectManager.addVariable();
-		}
-		else if (strcmp(spell, "data") == 0) {
-			expected = Expected::DataValue;
-		}*/
-
-
-		//
-
-		//
-		
-
-	/*}
-	else if (sym == Scan::Type::EndArray)
+	}
+	else if (sym == Scan::EndArray)
 	{
-		expected = Expected::None;
-	}*/
 
+	}
 }
-void Parser::serveArray()
-{
-	if (expected == Expected::WordValues) {
-		if (expsString[0] != spell)
-		{
-			cout << "Unexpected word. Expected: \"values\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-		expected = Expected::Values;
-	}
-	else if (expected == Expected::Type)
-	{
-		objectManager.setType(spell);
-		expected = Expected::WordName;
-	}
-	else if (expected == Expected::WordName)
-	{
-		if (expsString[0] != spell)
-		{
-			cout << "Unexpected word. Expected: \"name\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
 
-		expected = Expected::Name;
-	}
-	else if (expected == Expected::Name)
-	{
-		objectManager.setName(spell);
-		expected = Expected::WordValues;
-	}
-	else if (expected == Expected::StructTypeName)
-	{
-		objectManager.setStructTypeName(spell);
-		expected = Expected::None;
-	}
-	else if (expected == Expected::Values)
-	{
-		if (expsString[0] != spell)
-		{
-			cout << "Unexpected word. Expected: \"value\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-
-		expected = Expected::Value;
-	}
-	else if (expected == Expected::Value)
-	{
-		objectManager.addArrayValue(spell);
-		expected = Expected::Values;
-	}
-	else if (expected == Expected::Fields)
-	{
-		if (strcmp(spell, "attrib") == 0)
-		{
-			expected = Expected::FieldName;
-		}
-		else
-		{
-			//tu sygnalizacja bledu, bo powinno byc "attrib"
-		}
-	}
-	else if (expected == Expected::FieldName)
-	{
-		objectManager.setStructFieldName(spell);
-		expected = Expected::FieldType;
-	}
-	else if (expected == Expected::FieldType)
-	{
-		if (strcmp(spell, "type") == 0)
-		{
-			expected = Expected::FieldTypeName;
-		}
-		else
-		{
-			//tu sygnalizacja bledu, bo powinno byc "type"
-		}
-	}
-	else if (expected == Expected::FieldTypeName)
-	{
-		objectManager.setStructFieldType(spell);
-		expected = Expected::Fields;
-	}
-	else if (expected == Expected::DataValue)
-	{
-		objectManager.setVariableData(spell);
-		expected = Expected::None;
-	}
-
-}
 
 void Parser::setSpaces()
 {
@@ -367,5 +276,8 @@ void Parser::write(Scan::Type tmp)
 		case Scan::EndArray:		cout << "]" ; break;
 		case Scan::Error:			cout << "error" ; break;
 		case Scan::ComplexEmpty:	cout << "ComplexEmpty" ; break;
+		case Scan::None:			cout << "None"; break;
+		case Scan::END_FILE:		cout << "End_File"; break;
+		default:					cout << "abc";
 	}
 }

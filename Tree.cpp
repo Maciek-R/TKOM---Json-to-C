@@ -3,7 +3,17 @@
 Tree::Tree()
 {
 	tokens.push_back(new SimpleTokenType(Scan::Object));
+	tokens.push_back(new SimpleTokenType(Scan::String));
+	tokens.push_back(new SimpleTokenType(Scan::Value));
+	tokens.push_back(new SimpleTokenType(Scan::String));
+	tokens.push_back(new SimpleTokenType(Scan::Comma));
+	tokens.push_back(new SimpleTokenType(Scan::String));
+	tokens.push_back(new SimpleTokenType(Scan::Value));
+	tokens.push_back(new SimpleTokenType(Scan::Array));
 	tokens.push_back(new ComplexTokenType());
+
+
+	tokens.push_back(new SimpleTokenType(Scan::EndArray));
 	tokens.push_back(new SimpleTokenType(Scan::EndObject));
 }
 

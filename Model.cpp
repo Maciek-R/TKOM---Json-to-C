@@ -42,7 +42,8 @@ void Model::setStructFieldType(char* structFieldType)
 
 void Model::setVariableData(char* data)
 {
-	strncpy_s(this->data, data, 32);
+	//strncpy_s(this->data, data, 32);
+	values.push_back(data);
 }
 void Model::setSimpleType(bool b)
 {
@@ -58,12 +59,13 @@ bool Model::isSimpleType()
 void Model::write()
 {
 	if (typ == Model::Typ::Array) {
-		std::cout << Type << std::endl;
-		std::cout << Name << std::endl;
-
+		std::cout << "TABLICA" << std::endl;
+		std::cout << "\tTYPE:\t" << Type << std::endl;
+		std::cout << "\tNAME:\t" << Name << std::endl;
+		std::cout << "\tDATA:\t" << std::endl;
 		for (unsigned i = 0; i < values.size(); ++i)
 		{
-			std::cout << "\t" << values[i] << std::endl;
+			std::cout << "\t\t" << values[i] << std::endl;
 		}
 	}
 	else if (typ == Model::Typ::Structure)
