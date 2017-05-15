@@ -1,101 +1,47 @@
 #include "Parser.h"
 
-void Parser::serveArray()
+void Parser::acceptNewSimpleArray()
 {
-	if (expected == Expected::Type)
-	{
-		if (objectManager.checkIfTypeIsExisting(spell))
+	bool f = true;
+	bool firstTime = true;
+	nexts();
+	while (f) {
+		if (sym == Scan::EndArray) // oznacza koniec deklarowania nowych elementów tablicy
 		{
-			objectManager.setType(spell);
-			expected = Expected::WordName;
+			f = false;
 		}
-		else
+		else if (sym == Scan::Comma)
 		{
-			cout << "Undefined type: " << spell << endl;
-			_getch();
-			exit(0);
+			acceptNext(Scan::Object);
+			acceptNewElementOfSimpleArray();
+			acceptNext(Scan::EndObject);
 		}
-	}
-	else if (expected == Expected::WordName)
-	{
-		if (expsString[0] != spell)
+		else if (sym == Scan::Object)//nowy element tablicy
 		{
-			cout << "Unexpected word. Expected: \"name\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-		expected = Expected::Name;
-	}
-	else if (expected == Expected::Name)
-	{
-		objectManager.setName(spell);
-		expected = Expected::WordValues;
-	}
-	else if (expected == Expected::WordValues)
-	{
-		if (expsString[0] != spell)
-		{
-			cout << "Unexpected word. Expected: \"values\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-		expected = Expected::Values;			//oczekuje siê { - pierwsza zmienna w strukturze
-											// lub ] - wtedy jest pusta struktura(nie ma w niej zmiennych
-											// lub , - kolejna zmienna w strukturze(nie pierwsza)
-	}
-	else if (expected == Expected::Values)
-	{
-		if (sym == Scan::Object)	//nie dodaje go do listy exps, bo juz zosta³ sprawdzony
-		{
-			tree.add(new SimpleTokenType(Scan::String));  expsString.push_back("value");
-			tree.add(new SimpleTokenType(Scan::Value));
-			tree.add(new SimpleTokenType(Scan::String));
-			tree.add(new SimpleTokenType(Scan::EndObject));
-
-			tree.add(new ComplexTokenType());		// to jest wa¿ne, definiujemy ze coœ mo¿e tu byæ, ale nie musi
-			expected = Expected::WordValue;
+			if (firstTime)
+			{
+				acceptNewElementOfSimpleArray();
+				acceptNext(Scan::EndObject);
+				firstTime = false;
+			}
+			else {
+				error(Scan::Comma, Scan::Object);
+			}
 
 		}
-		else if (sym == Scan::EndArray)
-		{
-			cout << "KONIEC" << endl;
-			vartype = VARTYPE::None;
-		}
-		else
-		{
-			cout << "Unexpected token("; write(sym); cout << "). Expected: '{', ',', or ']' " << endl;
+		else {
+			std::cout << "Expected { or ] or ," << std::endl;
 			_getch();
 			exit(0);
 		}
+		if (f)
+			nexts();
 	}
-	else if (expected == Expected::WordValue)
-	{
-		if (expsString[0] != spell)
-		{
-			cout << "Unexpected word. Expected: \"value\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-		expected = Expected::DataValue;
-	}
+}
 
-	else if (expected == Expected::DataValue)
-	{
-		//objectManager.setVariableData(spell);
-		objectManager.addArrayValue(spell);
-		expected = Expected::NextDataValue;
-	}
-
+void Parser::acceptNewElementOfSimpleArray()
+{
+	acceptNext(Scan::String);
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);		objectManager.addArrayValue(scan->getSpell());
 }

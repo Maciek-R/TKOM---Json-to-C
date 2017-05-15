@@ -11,7 +11,7 @@ Scan::Type Scan::nextSymbol() {
 			if (c == '\0') {
 				return Error;
 			}
-		} while (source->isSpace(c));
+		} while (source->isWhiteChar(c));
 
 		if (c == '{') {
 			
@@ -65,6 +65,7 @@ Scan::Type Scan::nextSymbol() {
 			
 			return EndArray;
 		}
+		
 
 
 
@@ -93,4 +94,8 @@ void Scan::setSpaces()
 {
 	for (int q = 0; q < tab; ++q)
 		cout << '\t';
+}
+int Scan::getLine()
+{
+	return source->line;
 }

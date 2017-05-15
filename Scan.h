@@ -19,7 +19,7 @@ class Scan
 		Type nextSymbol();
 		void nextChar();
 		char * getSpell();
-
+		int getLine();
 
 		void setSpaces();
 };

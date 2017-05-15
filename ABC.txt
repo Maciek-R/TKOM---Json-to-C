@@ -18,25 +18,28 @@
 							"attrib": "c",
 							"type": "int"
 						}
-						
 					]
 			},
 			{
-			
-				"variable": "MyInt",
-				"name": "zmienna1",
-				"data": "5"
-				
+				"sequenceName": "Struktura",	
+				"fields": 					
+					[
+						{
+							"attrib": "q",
+							"type": "int"
+						},
+						{
+							"attrib": "w",
+							"type": "int"
+						},
+						{
+							"attrib": "e",
+							"type": "int"
+						}
+					]
 			},
 			{
-			
-				"variable": "MyInt",
-				"name": "zmienna2",
-				"data": "159"
-				
-			},
-			{
-				"array": "MyInt",	
+				"array": "int",
 				"name" : "myIntArray",
 				"values":
 					[
@@ -49,27 +52,12 @@
 
 					]	
 			},
-			{								
-				"variable": "MySeq",	
-				"name": "mySeq",
-				"data":
-				[
-					{	
-						"attrib": "a",
-						"value": "10"
-					},
-					{	
-						"attrib": "b",
-						"value": "11"
-					},
-					{	
-						"attrib": "c",
-						"value": "12"
-					}
-				]
+			{
 			
+				"variable": "int",
+				"name": "zmienna1",
+				"data": "5"
 			}
-			
 		]
 }	
 			

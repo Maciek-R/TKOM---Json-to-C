@@ -27,10 +27,19 @@ private:
 	void write(Scan::Type tmp);
 	void error(Scan::Type, Scan::Type);
 
-	void serveNewType();
-	void serveArray();
-	void serveStruct();
 	void serveVar();
+
+	void accept(Scan::Type);
+	void acceptNext(Scan::Type);
+	void acceptNext(Scan::Type, char *);
+	void acceptModule();
+	void acceptNewObject();
+	void acceptNewObjectType();
+	void acceptNewStructure();
+	void acceptNewElementOfStructure();
+
+	void acceptNewSimpleArray();
+	void acceptNewElementOfSimpleArray();
 public:
 	
 	Parser(Scan*);

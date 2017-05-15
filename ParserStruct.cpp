@@ -1,122 +1,51 @@
 #include "Parser.h"
 
-void Parser::serveStruct()
+void Parser::acceptNewStructure()
 {
-	if (expected == Expected::Type)
-	{
-		objectManager.setStructTypeName(spell);
-		objectManager.addNewType(spell);
-		expected = Expected::WordFields;
-	}
-	else if (expected == Expected::WordFields)
-	{
-		if (expsString[0] != spell)
+	bool f = true;
+	bool firstTime = true;
+	nexts();
+	while (f) {
+		if (sym == Scan::EndArray) // oznacza koniec deklarowania nowychelementów struktury
 		{
-			cout << "Unexpected word("<<spell<<"). Expected: \"fields\"" << endl;
+			f = false;
+		}
+		else if (sym == Scan::Comma)
+		{
+			acceptNext(Scan::Object);
+			acceptNewElementOfStructure();
+			acceptNext(Scan::EndObject);
+		}
+		else if (sym == Scan::Object)//nowy element struktury
+		{
+			if (firstTime)
+			{
+				acceptNewElementOfStructure();
+				acceptNext(Scan::EndObject);
+				firstTime = false;
+			}
+			else {
+				error(Scan::Comma, Scan::Object);
+			}
+
+		}
+		else {
+			std::cout << "Expected { or ] or ," << std::endl;
 			_getch();
 			exit(0);
 		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-
-		expected = Expected::Fields;	//oczekuje siê { - pierwsza zmienna w strukturze
-										// lub ] - wtedy jest pusta struktura(nie ma w niej zmiennych
-										// lub , - kolejna zmienna w strukturze(nie pierwsza)
+		if (f)
+			nexts();
 	}
-	else if (expected == Expected::Fields)
-	{
-		if (sym == Scan::Object)	//nie dodaje go do listy exps, bo juz zosta³ sprawdzony
-		{
-			tree.add(new SimpleTokenType(Scan::String));  expsString.push_back("attrib"); cout << "dodano" << endl;
-			tree.add(new SimpleTokenType(Scan::Value));
-			tree.add(new SimpleTokenType(Scan::String));
-			tree.add(new SimpleTokenType(Scan::Comma));
-			tree.add(new SimpleTokenType(Scan::String));  expsString.push_back("type");
-			tree.add(new SimpleTokenType(Scan::Value));
-			tree.add(new SimpleTokenType(Scan::String));
-			tree.add(new SimpleTokenType(Scan::EndObject));
+}
 
-			tree.add(new ComplexTokenType());		// to jest wa¿ne, definiujemy ze coœ mo¿e tu byæ, ale nie musi
-			expected = Expected::WordAttrib;
-			
-		}
-		else if (sym == Scan::Comma)	// to chyba do wyrzucenia
-		{
-			cout << "asdasdasdasdasdasdasdasd" << endl;
-			tree.add(new SimpleTokenType(Scan::Object));
-			tree.add(new SimpleTokenType(Scan::String));  expsString.push_back("attrib");
-			tree.add(new SimpleTokenType(Scan::Value));
-			tree.add(new SimpleTokenType(Scan::String));
-			tree.add(new SimpleTokenType(Scan::Comma));
-			tree.add(new SimpleTokenType(Scan::String)); expsString.push_back("type");
-			tree.add(new SimpleTokenType(Scan::Value));
-			tree.add(new SimpleTokenType(Scan::String));
-			tree.add(new SimpleTokenType(Scan::EndObject));
-
-			expected = Expected::WordAttrib;
-		}
-		else if (sym == Scan::EndArray)
-		{
-			//exps.push_back(Scan::EndObject);
-			vartype = VARTYPE::None;
-		}
-		else
-		{
-			cout << "Unexpected token("; write(sym); cout <<"). Expected: '{', ',', or ']' " << endl;
-			_getch();
-			exit(0);
-		}
-
-	}
-	else if (expected == Expected::WordAttrib)
-	{
-		if (expsString[0] != spell)
-		{
-			cout << "Unexpected word. Expected: \"attrib\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-
-		expected = Expected::FieldName;
-	}
-	else if (expected == Expected::FieldName)
-	{
-		objectManager.setStructFieldName(spell);
-		expected = Expected::WordType;
-	}
-	else if (expected == Expected::WordType)
-	{
-		if (expsString[0] != spell)
-		{
-			cout << "Unexpected word. Expected: \"type\"" << endl;
-			_getch();
-			exit(0);
-		}
-		else
-		{
-			expsString.erase(expsString.begin());
-		}
-
-		expected = Expected::FieldType;
-	}
-	else if (expected == Expected::FieldType)
-	{
-		if (objectManager.checkIfTypeIsExisting(spell))
-		{
-			objectManager.setStructFieldType(spell);
-			expected = Expected::NextField;
-		}
-		else 
-		{
-			cout << "Undefined: " << spell << endl;
-			_getch();
-			exit(0);
-		}
-	}
+void Parser::acceptNewElementOfStructure()
+{
+	acceptNext(Scan::String, "attrib");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);	objectManager.setStructFieldName(scan->getSpell());
+	acceptNext(Scan::Comma);
+	acceptNext(Scan::String, "type");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);	objectManager.setStructFieldType(scan->getSpell());
 }

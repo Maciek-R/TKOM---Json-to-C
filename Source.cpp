@@ -8,6 +8,7 @@ Source::Source()
 
 	while (getline(plik, line)) {
 		jsonString += line;
+		jsonString += '\n';
 	}
 	plik.close();
 }
@@ -29,9 +30,14 @@ char Source::nextChar()
 		return false;
 	}*/
 }
-bool Source::isSpace(char x) {
+bool Source::isWhiteChar(char x) {
 	if (x == ' ' || x == '\t')
 		return true;
+	else if (x == '\n')
+	{
+		++line;
+		return true;
+	}
 	else
 		return false;
 }

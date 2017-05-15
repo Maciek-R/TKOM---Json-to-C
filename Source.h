@@ -17,8 +17,9 @@ public:
 	string getStringFromFile();
 
 	char nextChar();
-	bool isSpace(char x);
+	bool isWhiteChar(char x);
 	bool isDigit(char x);
+	int  line = 0;
 };
 
 #endif
