@@ -94,7 +94,7 @@ void Parser::acceptNext(Scan::Type type)
 	nexts();
 	accept(type);
 }
-void Parser::acceptNext(Scan::Type type, char * str)
+void Parser::acceptNext(Scan::Type type, const char * str)
 {
 	acceptNext(type);
 	spell = scan->getSpell();
@@ -168,7 +168,7 @@ void Parser::acceptNewObjectType()
 	{
 		objectManager.addStructDeclaration();
 		acceptNext(Scan::Value);	
-		acceptNext(Scan::String);			objectManager.setStructTypeName(scan->getSpell());
+		acceptNext(Scan::String);			objectManager.setStructTypeName(scan->getSpell()); objectManager.addNewType(scan->getSpell());
 		acceptNext(Scan::Comma);
 		acceptNext(Scan::String, "fields");
 		acceptNext(Scan::Value);
@@ -182,7 +182,15 @@ void Parser::acceptNewObjectType()
 	{
 		objectManager.addArray();
 		acceptNext(Scan::Value);
-		acceptNext(Scan::String);			objectManager.setType(scan->getSpell());
+		acceptNext(Scan::String);	
+
+		if(objectManager.checkIfTypeIsExisting(scan->getSpell())) 
+			objectManager.setType(scan->getSpell());
+		else {
+			cout << "Undefined type: " << scan->getSpell() << " Line: " << scan->getLine() << endl;
+			_getch();
+			exit(0);
+		}
 		acceptNext(Scan::Comma);
 		acceptNext(Scan::String, "name");	
 		acceptNext(Scan::Value);
@@ -200,24 +208,41 @@ void Parser::acceptNewObjectType()
 
 		accept(Scan::EndArray);
 	}
-	else if (strcmp(spell, "variable") == 0) 
+	else if (strcmp(spell, "variable") == 0)
 	{
+		std::string tmpName;
 		objectManager.addVariable();
 		acceptNext(Scan::Value);
-		acceptNext(Scan::String);		objectManager.setType(scan->getSpell());
+		acceptNext(Scan::String);
+		if (objectManager.checkIfTypeIsExisting(scan->getSpell()))
+		{
+			objectManager.setType(scan->getSpell());
+			tmpName = scan->getSpell();
+		}
+		else {
+			cout << "Undefined type: " << scan->getSpell() << " Line: " << scan->getLine() << endl;
+			_getch();
+			exit(0);
+		}
 		acceptNext(Scan::Comma);
 		acceptNext(Scan::String, "name");
 		acceptNext(Scan::Value);
-		acceptNext(Scan::String);		objectManager.setName(scan->getSpell());
+		acceptNext(Scan::String);			objectManager.setName(scan->getSpell()); 
 		acceptNext(Scan::Comma);
 		acceptNext(Scan::String, "data");
 		acceptNext(Scan::Value);
 
-		//na razie typ prosty tylko
-		//if(simple....
-		acceptNext(Scan::String);		objectManager.setVariableData(scan->getSpell());
-		//
-		//else
+		if (objectManager.isSimpleType())
+		{
+			acceptNext(Scan::String);		objectManager.setVariableData(scan->getSpell());
+		}
+		else 
+		{
+			acceptNext(Scan::Array);
+			acceptNewVariable(tmpName);
+			accept(Scan::EndArray);
+		}
+		
 		
 
 	}

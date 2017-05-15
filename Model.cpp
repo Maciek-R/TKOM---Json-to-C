@@ -5,6 +5,22 @@ Model::Model(Model::Typ t)
 {
 	typ = t;
 }
+char* Model::getName()
+{
+	return this->Name;
+}
+std::string Model::getFieldName(int x)
+{
+	return this->fieldNames[x];
+}
+std::string Model::getFieldType(int x)
+{
+	return this->fieldTypes[x];
+}
+int Model::getFieldsAndTypesSize()
+{
+	return this->fieldNames.size();
+}
 
 void Model::setType(char * type)
 {
@@ -36,6 +52,7 @@ void Model::setStructFieldType(char* structFieldType)
 	std::string s(structFieldType);
 	fieldTypes.push_back(s);
 }
+
 
 
 
@@ -93,8 +110,10 @@ void Model::write()
 			std::cout << "\tDATA:\t" << data << std::endl;
 		else {
 			std::cout << "\tDATA:\t" << std::endl;
-			for(unsigned i=0; i<values.size(); ++i)
-				std::cout << "\t\t" << values[i] << std::endl;
+			for (unsigned i = 0; i < fieldTypes.size(); ++i)
+			{
+				std::cout << "\t\t" << fieldTypes[i] <<"\t" << fieldNames[i] << std::endl;
+			}
 		}
 	}
 }

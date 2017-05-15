@@ -13,10 +13,6 @@
 						{
 							"attrib": "b",
 							"type": "int"
-						},
-						{
-							"attrib": "c",
-							"type": "int"
 						}
 					]
 			},
@@ -57,6 +53,22 @@
 				"variable": "int",
 				"name": "zmienna1",
 				"data": "5"
+			},
+			{
+			
+				"variable": "MySeq",
+				"name": "myInst",
+				"data": 
+				[
+					{	
+						"attrib": "a",
+						"value": "10"
+					},
+					{	
+						"attrib": "b",
+						"value": "11"
+					}
+				]
 			}
 		]
 }	

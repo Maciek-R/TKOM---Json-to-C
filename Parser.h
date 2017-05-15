@@ -5,7 +5,7 @@
 #include "ObjectManager.h"
 #include <conio.h>
 #include <vector>
-#include "Tree.h"
+
 
 class Parser
 {
@@ -22,7 +22,6 @@ private:
 	enum class Expected {None, Type, Name, Value, Values, Fields, StructTypeName, FieldName, FieldType, FieldTypeName, DataValue, Colon, Object, WordName, WordValues, WordValue, WordFields, WordAttrib, WordType, Data, WordData, NextField, NextDataValue};
 	Expected expected=Expected::None;
 	//std::vector <Scan::Type> exps;
-	Tree tree;
 	std::vector <string> expsString;
 	void write(Scan::Type tmp);
 	void error(Scan::Type, Scan::Type);
@@ -31,7 +30,7 @@ private:
 
 	void accept(Scan::Type);
 	void acceptNext(Scan::Type);
-	void acceptNext(Scan::Type, char *);
+	void acceptNext(Scan::Type, const char *);
 	void acceptModule();
 	void acceptNewObject();
 	void acceptNewObjectType();
@@ -40,6 +39,9 @@ private:
 
 	void acceptNewSimpleArray();
 	void acceptNewElementOfSimpleArray();
+
+	void acceptNewVariable(std::string);
+	void acceptNewElementOfVariable(std::string);
 public:
 	
 	Parser(Scan*);

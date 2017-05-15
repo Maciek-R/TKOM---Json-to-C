@@ -5,7 +5,6 @@
 
 #include <vector>
 #include "Model.h"
-#include "Array.h"
 #include <string>
 //#include "Var.h"
 //#include "Structure.h"
@@ -30,6 +29,7 @@ public:
 	void setStructTypeName(char*);
 	void setStructFieldName(char*);
 	void setStructFieldType(char*);
+	Model* getStructureWithTypeName(std::string);
 
 	void addVariable();
 	void setVariableData(char*);

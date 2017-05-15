@@ -24,6 +24,10 @@ public:
 	Model::Typ typ;
 
 	Model(Model::Typ);
+	char * getName();
+	std::string getFieldName(int);
+	std::string getFieldType(int);
+	int getFieldsAndTypesSize();
 
 	void setType(char *);
 	void setName(char *);

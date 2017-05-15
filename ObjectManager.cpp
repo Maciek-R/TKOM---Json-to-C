@@ -54,6 +54,18 @@ void ObjectManager::setStructFieldType(char * structFieldType)
 {
 	models[models.size() - 1]->setStructFieldType(structFieldType);
 }
+Model* ObjectManager::getStructureWithTypeName(std::string typeName)
+{
+	for (unsigned i = 0; i < models.size(); ++i)
+	{
+		if (models[i]->typ == Model::Structure) {
+			if (strcmp(typeName.c_str(), models[i]->getName()) == 0)
+			{
+				return models[i];
+			}
+		}
+	}
+}
 
 
 
