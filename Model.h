@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <fstream>
 
 class Model
 {
@@ -12,6 +13,9 @@ private:
 	char Name[32];//nazwa tablicy, nazwa typu struktury lub nazwa zmiennej
 	std::vector<std::string> values;// wartoœci tablicy lub zmiennej strukturalnej
 	
+	//uzywane przez tablice przechowujace struktury
+	std::vector<Model*> models;
+
 	//uzywane przez strukture
 	std::vector<std::string> fieldNames;
 	std::vector<std::string> fieldTypes;
@@ -24,6 +28,8 @@ public:
 	Model::Typ typ;
 
 	Model(Model::Typ);
+	void addModel(Model*);
+	int getModelSize();
 	char * getName();
 	std::string getFieldName(int);
 	std::string getFieldType(int);
@@ -42,7 +48,7 @@ public:
 	void setSimpleType(bool);
 	bool isSimpleType();
 
-	void write();
+	void write(std::fstream &);
 };
 
 #endif

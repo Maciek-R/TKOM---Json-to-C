@@ -1,0 +1,34 @@
+typedef struct MySeq
+{
+	int a;
+	int b;
+}
+typedef struct OuterStruct
+{
+	MySeq d;
+	int e;
+}
+typedef struct Struktura
+{
+	int q;
+	int w;
+	int e;
+}
+int myIntArray[2];
+myIntArray[0] = 80;
+myIntArray[1] = 81;
+
+int zmienna1 = 5;
+
+MySeq mySeqArray[2];
+mySeqArray[0].a = 50;
+mySeqArray[0].b = 51;
+mySeqArray[0].c = 52;
+mySeqArray[1].a = 100;
+mySeqArray[1].b = 151;
+mySeqArray[1].c = 252;
+
+MySeq mySeq;
+mySeq.a = 10;
+mySeq.b = 11;
+

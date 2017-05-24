@@ -19,7 +19,7 @@ public:
 	char nextChar();
 	bool isWhiteChar(char x);
 	bool isDigit(char x);
-	int  line = 0;
+	int  line;
 };
 
 #endif

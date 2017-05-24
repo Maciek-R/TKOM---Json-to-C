@@ -10,22 +10,31 @@ void Parser::acceptNewVariable(std::string typeName)
 	bool firstTime = true;
 	nexts();
 	while (f) {
+
+		
+
 		if (sym == Scan::EndArray) // oznacza koniec 
 		{
 			f = false;
 		}
-		else if (sym == Scan::Comma)
+		else if (sym == Scan::Comma)//kolejny element zmiennej strukturalnej
 		{
 			acceptNext(Scan::Object);
-			acceptNewElementOfVariable(m->getFieldName(i));
+			if (i == size)
+			{
+				std::cout << "Too many variables! Should be "<<size<< " .Line: " << scan->getLine() << std::endl;
+				_getch();
+				exit(0);
+			}
+			acceptNewElementOfVariable(m->getFieldName(i), true);
 			++i;
 			acceptNext(Scan::EndObject);
 		}
-		else if (sym == Scan::Object)//nowy element zmiennej strukturalnej
+		else if (sym == Scan::Object)//pierwszy element zmiennej strukturalnej
 		{
 			if (firstTime)
 			{
-				acceptNewElementOfVariable(m->getFieldName(i));
+				acceptNewElementOfVariable(m->getFieldName(i), true);
 				++i;
 				acceptNext(Scan::EndObject);
 				firstTime = false;
@@ -36,7 +45,7 @@ void Parser::acceptNewVariable(std::string typeName)
 
 		}
 		else {
-			std::cout << "Expected { or ] or ," << std::endl;
+			std::cout << "Expected { or ] or ,. Line: "<<scan->getLine() << std::endl;
 			_getch();
 			exit(0);
 		}
@@ -45,7 +54,7 @@ void Parser::acceptNewVariable(std::string typeName)
 	}
 }
 
-void Parser::acceptNewElementOfVariable(std::string name)
+void Parser::acceptNewElementOfVariable(std::string name, bool isSimpleType)
 {
 	acceptNext(Scan::String, "attrib");
 	acceptNext(Scan::Value); 
@@ -53,5 +62,8 @@ void Parser::acceptNewElementOfVariable(std::string name)
 	acceptNext(Scan::Comma);
 	acceptNext(Scan::String, "value");
 	acceptNext(Scan::Value);
+	
 	acceptNext(Scan::String);				objectManager.setStructFieldName(scan->getSpell());
+	
+	
 }

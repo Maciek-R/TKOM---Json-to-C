@@ -16,6 +16,20 @@
 						}
 					]
 			},
+			{	"sequenceName": "OuterStruct",	
+				"fields": 
+					[
+						{
+							"attrib": "d",
+							"type": "MySeq"
+						},
+						{
+							"attrib": "e",
+							"type": "int"
+						}
+					
+					]
+			},
 			{
 				"sequenceName": "Struktura",	
 				"fields": 					
@@ -55,10 +69,53 @@
 				"data": "5"
 			},
 			{
-			
-				"variable": "MySeq",
-				"name": "myInst",
-				"data": 
+				"array": "MySeq",
+				"name": "mySeqArray",
+				"values": 
+					[
+						{
+							"value": 
+							[
+								{
+									"attrib": "a",
+									"value": "50"
+								},
+								{
+									"attrib": "b",
+									"value": "51"
+								},
+								{
+									"attrib": "c",
+									"value": "52"
+								}
+
+							]
+						},
+						{
+							"value": 
+							[
+								{
+									"attrib": "a",
+									"value": "100"
+								},
+								{
+									"attrib": "b",
+									"value": "151"
+								},
+								{
+									"attrib": "c",
+									"value": "252"
+								}
+
+							]
+						}
+						
+					]
+			},
+			{
+				"variable": "MySeq",		
+				"name": "mySeq",
+				"data":
 				[
 					{	
 						"attrib": "a",
@@ -69,6 +126,7 @@
 						"value": "11"
 					}
 				]
+			
 			}
 		]
 }	

@@ -10,6 +10,11 @@ ObjectManager::ObjectManager()
 	declaredSimpleTypes.push_back("string");
 }
 
+void ObjectManager::addModel(Model*m)
+{
+	models[models.size() - 1]->addModel(m);
+}
+
 void ObjectManager::addArray()
 {
 	models.push_back(new Model(Model::Typ::Array));
@@ -85,14 +90,15 @@ bool ObjectManager::isSimpleType()
 
 void ObjectManager::writeAll()
 {
-	
+	std::fstream file;
+	file.open("output.txt", std::ios::out);
 	for (unsigned i = 0; i < models.size(); ++i)
 	{
-		models[i]->write();
+		models[i]->write(file);
 		std::cout << std::endl;
 	}
 	
-	
+	file.close();
 }
 
 bool ObjectManager::checkIfTypeIsExisting(std::string type)
@@ -113,3 +119,4 @@ void ObjectManager::addNewType(std::string type)
 {
 	declaredOwnTypes.push_back(type);
 }
+

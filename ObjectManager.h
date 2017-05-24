@@ -6,6 +6,7 @@
 #include <vector>
 #include "Model.h"
 #include <string>
+#include <fstream>
 //#include "Var.h"
 //#include "Structure.h"
 
@@ -18,6 +19,7 @@ private:
 	std::vector<std::string> declaredOwnTypes;
 public:
 	ObjectManager();
+	void addModel(Model*);
 
 	void addArray();
 	void setType(char*);

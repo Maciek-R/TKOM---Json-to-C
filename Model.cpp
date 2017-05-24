@@ -5,6 +5,14 @@ Model::Model(Model::Typ t)
 {
 	typ = t;
 }
+void Model::addModel(Model*m)
+{
+	models.push_back(m);
+}
+int Model::getModelSize()
+{
+	return models.size();
+}
 char* Model::getName()
 {
 	return this->Name;
@@ -76,30 +84,70 @@ bool Model::isSimpleType()
 
 
 
-void Model::write()
+void Model::write(std::fstream & file)
 {
 	if (typ == Model::Typ::Array) {
-		std::cout << "TABLICA" << std::endl;
+		/*std::cout << "TABLICA" << std::endl;
 		std::cout << "\tTYPE:\t" << Type << std::endl;
 		std::cout << "\tNAME:\t" << Name << std::endl;
 		std::cout << "\tDATA:\t" << std::endl;
-		for (unsigned i = 0; i < values.size(); ++i)
+		if (simpleType)
 		{
-			std::cout << "\t\t" << values[i] << std::endl;
+			for (unsigned i = 0; i < values.size(); ++i)
+			{
+				std::cout << "\t\t" << values[i] << std::endl;
+			}
 		}
+		else
+		{
+			for (unsigned i = 0; i < models.size(); ++i)
+			{
+				models[i]->write();
+			}
+		}*/
+
+		if (simpleType)
+		{
+			file << Type << " " << Name << "[" << values.size() << "];\n";
+			for (unsigned i = 0; i < values.size(); ++i)
+			{
+				file << Name << "[" << i << "] = " << values[i] << ";" << std::endl;
+			}
+		}
+		else
+		{
+			file << Type << " " << Name << "[" << models.size() << "];\n";
+			for (unsigned i = 0; i < models.size(); ++i)
+			{
+				
+				for (int j = 0; j < models[i]->getFieldsAndTypesSize(); ++j)
+				{
+					file << Name << "[" << i << "].";
+					file << models[i]->getFieldType(j) << " = " << models[i]->getFieldName(j) << ";\n";
+				}
+			}
+		}
+		file << "\n";
 	}
 	else if (typ == Model::Typ::Structure)
 	{
-		std::cout << "STRUKTURA:\t" << Name << std::endl;
+		/*std::cout << "STRUKTURA:\t" << Name << std::endl;
 		for (unsigned i = 0; i < fieldNames.size(); ++i)
 		{
 			std::cout << "\tNAME:\t" << fieldNames[i] << std::endl;
 			std::cout << "\tTYPE:\t" << fieldTypes[i] << std::endl;
+		}*/
+		file << "typedef struct " << Name <<"\n";
+		file << "{\n";
+		for (unsigned i = 0; i < fieldNames.size(); ++i)
+		{
+			file << "\t" << fieldTypes[i] << " " << fieldNames[i] << ";\n";
 		}
+		file << "}\n";
 	}
 	else if (typ == Model::Typ::Var)
 	{
-		if(simpleType)
+		/*if(simpleType)
 			std::cout << "ZMIENNA TYPU PROSTEGO" << std::endl;
 		else
 			std::cout << "ZMIENNA TYPU ZDEFINIOWANEGO" << std::endl;
@@ -114,6 +162,25 @@ void Model::write()
 			{
 				std::cout << "\t\t" << fieldTypes[i] <<"\t" << fieldNames[i] << std::endl;
 			}
+		}*/
+
+
+		if (simpleType)
+		{
+		
+			file << Type;
+			file << " " << Name;
+			file << " = " << data << ";" << std::endl;
 		}
+		else 
+		{
+			file << Type;
+			file << " " << Name << ";\n";
+			for (unsigned i = 0; i < fieldTypes.size(); ++i)
+			{
+				file << Name << "." << fieldTypes[i] << " = " << fieldNames[i] << ";"<< std::endl;
+			}
+		}
+		file << "\n";
 	}
 }

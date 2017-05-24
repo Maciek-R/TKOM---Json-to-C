@@ -37,11 +37,14 @@ private:
 	void acceptNewStructure();
 	void acceptNewElementOfStructure();
 
-	void acceptNewSimpleArray();
+	void acceptNewArray(bool);
 	void acceptNewElementOfSimpleArray();
+	void acceptNewElementOfComplexArray();
+	void acceptNewElementStructInArray(Model *);
+	void acceptNewStructInArray();
 
 	void acceptNewVariable(std::string);
-	void acceptNewElementOfVariable(std::string);
+	void acceptNewElementOfVariable(std::string, bool);
 public:
 	
 	Parser(Scan*);

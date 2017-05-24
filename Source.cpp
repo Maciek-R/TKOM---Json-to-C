@@ -11,6 +11,7 @@ Source::Source()
 		jsonString += '\n';
 	}
 	plik.close();
+	this->line = 1;
 }
 
 string Source::getStringFromFile()

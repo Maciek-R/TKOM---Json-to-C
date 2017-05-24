@@ -100,7 +100,7 @@ void Parser::acceptNext(Scan::Type type, const char * str)
 	spell = scan->getSpell();
 	if (strcmp(spell, str) != 0)
 	{
-		cout << "Unexpected Word(" << spell << "). Expected: " << str << endl;
+		cout << "Unexpected Word(" << spell << "). Expected: " << str <<". Line: "<< scan->getLine() << endl;
 		_getch();
 		exit(0);
 	}
@@ -131,13 +131,13 @@ void Parser::acceptNewObject()
 		{
 			f = false;
 		}
-		else if (sym == Scan::Comma)//nowy obiekt - zmienna, tablica lub struktura
+		else if (sym == Scan::Comma)//kolejny obiekt - zmienna, tablica lub struktura
 		{
 			acceptNext(Scan::Object);
 			acceptNewObjectType();
 			acceptNext(Scan::EndObject);
 		}
-		else if (sym == Scan::Object)//nowy obiekt - zmienna, tablica lub struktura
+		else if (sym == Scan::Object)//pierwszy obiekt - zmienna, tablica lub struktura
 		{
 			if(firstTime)
 			{
@@ -151,7 +151,7 @@ void Parser::acceptNewObject()
 			}
 		}
 		else {
-			std::cout << "Expected { lub ]" << std::endl;
+			std::cout << "Expected { or ]. " <<scan->getLine()<< std::endl;
 			_getch();
 			exit(0);
 		}
@@ -200,11 +200,10 @@ void Parser::acceptNewObjectType()
 		acceptNext(Scan::Value);
 		acceptNext(Scan::Array);
 
-		//TODO na razie tylko typy proste
-		//if(isSimple ...
-		acceptNewSimpleArray();
-		//else
-		//acceptNewComplexArray();
+		
+		acceptNewArray(objectManager.isSimpleType());
+		
+
 
 		accept(Scan::EndArray);
 	}
@@ -247,7 +246,7 @@ void Parser::acceptNewObjectType()
 
 	}
 	else {
-		std::cout << "Niepoprawny typ. Oczekiwano sequenceName, array lub variable" << std::endl;
+		std::cout << "Niepoprawny typ. Oczekiwano sequenceName, array lub variable. Line: " <<scan->getLine()<< std::endl;
 		_getch();
 		exit(0);
 	}

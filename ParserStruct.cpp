@@ -30,7 +30,7 @@ void Parser::acceptNewStructure()
 
 		}
 		else {
-			std::cout << "Expected { or ] or ," << std::endl;
+			std::cout << "Expected { or ] or ,. Line: " <<scan->getLine()<< std::endl;
 			_getch();
 			exit(0);
 		}
