@@ -1,5 +1,5 @@
 #include "Parser.h"
-
+/*
 void Parser::acceptNewVariable(std::string typeName)
 {
 	Model* m = objectManager.getStructureWithTypeName(typeName);
@@ -67,3 +67,4 @@ void Parser::acceptNewElementOfVariable(std::string name, bool isSimpleType)
 	
 	
 }
+*/

@@ -7,6 +7,8 @@
 #include "Model.h"
 #include <string>
 #include <fstream>
+#include "Structure.h"
+#include "SimpleType.h"
 //#include "Var.h"
 //#include "Structure.h"
 
@@ -14,6 +16,42 @@
 class ObjectManager
 {
 private:
+	std::vector<std::string> declaredSimpleTypes;
+	std::vector<std::string> declaredOwnTypes;
+
+	std::vector<Object*> objects;
+	std::vector<Structure*> structures;
+
+
+	Object* getType(std::string);
+	Structure* findStructure(std::string);
+public:
+	ObjectManager();
+
+	void addStructureType(Structure*);
+	bool existsStructureType(std::string);
+	bool existsStructField(Structure*, std::string);
+	void addStructureField(Structure*, std::string, std::string);
+
+	void addSimpleTypeVariable(std::string, std::string, std::string);
+
+	bool existsType(std::string);
+	bool isSimpleType(std::string);
+
+
+
+
+
+
+
+
+
+
+
+
+
+	void writeAll(std::string);
+/*private:
 	std::vector<Model*> models;
 	std::vector<std::string> declaredSimpleTypes;
 	std::vector<std::string> declaredOwnTypes;
@@ -40,7 +78,7 @@ public:
 	void writeAll(std::string);
 
 	bool checkIfTypeIsExisting(std::string);
-	void addNewType(std::string);
+	void addNewType(std::string);*/
 };
 
 #endif

@@ -1,5 +1,5 @@
 #include "Parser.h"
-
+/*
 void Parser::acceptNewStructure()
 {
 	bool f = true;
@@ -48,4 +48,4 @@ void Parser::acceptNewElementOfStructure()
 	acceptNext(Scan::String, "type");
 	acceptNext(Scan::Value);
 	acceptNext(Scan::String);	objectManager.setStructFieldType(scan->getSpell());
-}
+}*/

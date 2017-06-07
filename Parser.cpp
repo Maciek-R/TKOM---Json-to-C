@@ -10,9 +10,7 @@ Parser::Parser(Scan * scan)
 void Parser::start()
 {
 
-	acceptNext(Scan::Object);
 	acceptModule();
-	acceptNext(Scan::EndObject);
 	
 	std::cout << "Parsowanie zakonczone" << std::endl;
 
@@ -113,147 +111,233 @@ void Parser::acceptNext(Scan::Type type, const char * str)
 }
 void Parser::acceptModule()
 {
+	acceptNext(Scan::Object);
+
 	acceptNext(Scan::String, "modulename");	
 	acceptNext(Scan::Value);
 	acceptNext(Scan::String);
 	acceptNext(Scan::Comma);
+
+	acceptModuleArray();
+
+	acceptNext(Scan::EndObject);
+}
+void Parser::acceptModuleArray()
+{
 	acceptNext(Scan::String, "module");
 	acceptNext(Scan::Value);
 	acceptNext(Scan::Array);
 
-	acceptNewObject();
+	acceptNewObjects();
 
 	accept(Scan::EndArray);
 }
-void Parser::acceptNewObject()
+void Parser::acceptNewObjects()
 {
-	bool f = true;
-	bool firstTime = true;
-	nexts();
-	while(f)
-	{
-		if (sym == Scan::EndArray) // oznacza koniec deklarowania nowych obiektów
-		{
-			f = false;
-		}
-		else if (sym == Scan::Comma)//kolejny obiekt - zmienna, tablica lub struktura
-		{
-			acceptNext(Scan::Object);
-			acceptNewObjectType();
-			acceptNext(Scan::EndObject);
-		}
-		else if (sym == Scan::Object)//pierwszy obiekt - zmienna, tablica lub struktura
-		{
-			if(firstTime)
-			{
-				acceptNewObjectType();
-				acceptNext(Scan::EndObject);
-				firstTime = false;
-			}
-			else 
-			{
-				error(Scan::Comma, Scan::Object);
-			}
-		}
-		else {
-			std::cout << "Expected { or ]. " <<scan->getLine()<< std::endl;
-			_getch();
-			exit(0);
-		}
-		if (f)
-			nexts();
-	}
-
+	while (acceptNewObject());
 }
-void Parser::acceptNewObjectType()
+
+
+
+bool Parser::acceptNewObject()
 {
+	acceptNext(Scan::Object);
+
 	acceptNext(Scan::String);
 	spell = scan->getSpell();
-	if (strcmp(spell, "sequenceName") == 0)
-	{
-		objectManager.addStructDeclaration();
-		acceptNext(Scan::Value);	
-		acceptNext(Scan::String);			objectManager.setStructTypeName(scan->getSpell()); objectManager.addNewType(scan->getSpell());
-		acceptNext(Scan::Comma);
-		acceptNext(Scan::String, "fields");
-		acceptNext(Scan::Value);
-		acceptNext(Scan::Array);
 
-		acceptNewStructure();
-
-		accept(Scan::EndArray);
+	if (strcmp(spell, "sequenceName") == 0){
+		acceptSequenceName();
 	}
-	else if (strcmp(spell, "array") == 0) 
-	{
-		objectManager.addArray();
-		acceptNext(Scan::Value);
-		acceptNext(Scan::String);	
-
-		if(objectManager.checkIfTypeIsExisting(scan->getSpell())) 
-			objectManager.setType(scan->getSpell());
-		else {
-			cout << "Undefined type: " << scan->getSpell() << " Line: " << scan->getLine() << endl;
-			_getch();
-			exit(0);
-		}
-		acceptNext(Scan::Comma);
-		acceptNext(Scan::String, "name");	
-		acceptNext(Scan::Value);
-		acceptNext(Scan::String);			objectManager.setName(scan->getSpell());
-		acceptNext(Scan::Comma);
-		acceptNext(Scan::String, "values");
-		acceptNext(Scan::Value);
-		acceptNext(Scan::Array);
-
-		
-		acceptNewArray(objectManager.isSimpleType());
-		
-
-
-		accept(Scan::EndArray);
+	else if (strcmp(spell, "array") == 0) {
+		acceptArray();
 	}
-	else if (strcmp(spell, "variable") == 0)
-	{
-		std::string tmpName;
-		objectManager.addVariable();
-		acceptNext(Scan::Value);
-		acceptNext(Scan::String);
-		if (objectManager.checkIfTypeIsExisting(scan->getSpell()))
-		{
-			objectManager.setType(scan->getSpell());
-			tmpName = scan->getSpell();
-		}
-		else {
-			cout << "Undefined type: " << scan->getSpell() << " Line: " << scan->getLine() << endl;
-			_getch();
-			exit(0);
-		}
-		acceptNext(Scan::Comma);
-		acceptNext(Scan::String, "name");
-		acceptNext(Scan::Value);
-		acceptNext(Scan::String);			objectManager.setName(scan->getSpell()); 
-		acceptNext(Scan::Comma);
-		acceptNext(Scan::String, "data");
-		acceptNext(Scan::Value);
-
-		if (objectManager.isSimpleType())
-		{
-			acceptNext(Scan::String);		objectManager.setVariableData(scan->getSpell());
-		}
-		else 
-		{
-			acceptNext(Scan::Array);
-			acceptNewVariable(tmpName);
-			accept(Scan::EndArray);
-		}
-		
-		
-
+	else if (strcmp(spell, "variable") == 0){
+		acceptVariable();
 	}
 	else {
-		std::cout << "Niepoprawny typ. Oczekiwano sequenceName, array lub variable. Line: " <<scan->getLine()<< std::endl;
+		std::cout << "Niepoprawny typ. Oczekiwano sequenceName, array lub variable. Line: " << scan->getLine() << std::endl;
 		_getch();
 		exit(0);
 	}
+
+	accept(Scan::EndObject);
+	nexts();
+	return sym == Scan::Comma;
 }
 
+void Parser::acceptSequenceName()
+{
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+
+	spell = scan->getSpell();
+	std::string type = spell;
+
+	if (objectManager.existsStructureType(type)) {
+		std::cout << "Structure type already defined!" << std::endl;
+	}
+	Structure *structure = new Structure(type);
+
+	acceptNext(Scan::Comma);
+	acceptNext(Scan::String, "fields");
+	acceptNext(Scan::Value);
+
+	acceptSequenceFields(structure);
+	
+	objectManager.addStructureType(structure);
+
+	nexts();
+}
+
+void Parser::acceptSequenceFields(Structure* structure)
+{
+	acceptNext(Scan::Array);
+	while (acceptSequenceField(structure));
+	accept(Scan::EndArray);
+}
+bool Parser::acceptSequenceField(Structure* structure)
+{
+	acceptNext(Scan::Object);
+
+	acceptNext(Scan::String, "attrib");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+
+	spell = scan->getSpell();
+	std::string name = spell;
+
+	if (objectManager.existsStructField(structure, name)) {
+		std::cout <<"Structure field with name: " + name + " already exists." << std::endl;
+	}
+
+	acceptNext(Scan::Comma);
+
+	acceptNext(Scan::String, "type");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+
+	spell = scan->getSpell();
+	std::string type = spell;
+
+	if (!objectManager.existsType(type)) {
+		std::cout << "Structure field type " + type + " doesn't exists" << std::endl;
+	}
+	
+	objectManager.addStructureField(structure, name, type);
+
+	acceptNext(Scan::EndObject);
+	nexts();
+	return sym == Scan::Comma;
+}
+void Parser::acceptArray() {
+
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+	spell = scan->getSpell();//nie ma tutaj sprawdzania typu???
+	std::string type = spell;
+	acceptNext(Scan::Comma);
+
+	//parsePairString(KeyWord::NAME);
+	acceptNext(Scan::String, "name");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+	spell = scan->getSpell();
+	std::string name = spell;
+	acceptNext(Scan::Comma);
+
+	//values
+	acceptNext(Scan::String, "values");
+	acceptNext(Scan::Value);
+
+	
+
+	//Array * array = manager.addArrayVariable(arrayName, arrayType);
+	//parseArrayElements(array);
+	acceptArrayElements(/*array*/);
+
+	
+
+	nexts();
+}
+void Parser::acceptArrayElements(/*array*/)
+{
+	acceptNext(Scan::Array);
+	while (acceptArrayElement(/*array*/));
+	accept(Scan::EndArray);
+}
+
+bool Parser::acceptArrayElement(/*array*/)
+{
+	acceptNext(Scan::Object);
+
+	acceptNext(Scan::String, "value");
+	acceptNext(Scan::Value);
+
+	nexts();
+	if (sym == Scan::String)
+	{
+		spell = scan->getSpell();
+		//manager.addArrayValueSimpleType(array, value);
+	}
+	else if (sym == Scan::Array)
+	{
+
+	}
+	/*if (symbol.first == NUMBER || symbol.first == STRING) {
+		std::string value = symbol.second;
+		manager.addArrayValueSimpleType(array, value);
+	}
+	else if (symbol.first == ARRAY_BEG) {
+		//recursive - struct in struct
+		Structure *structure = manager.addArrayValueStructure(array);
+		parseVariableStruct(structure);
+	}*/
+
+	acceptNext(Scan::EndObject);
+	nexts();
+	return sym == Scan::Comma;
+}
+
+void Parser::acceptVariable()
+{
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+
+	spell = scan->getSpell();
+	std::string type = spell;
+
+	if (!objectManager.existsType(type)) {
+		std::cout<<"Undeclared variable type: " + type << std::endl;
+	}
+
+	acceptNext(Scan::Comma);
+
+	acceptNext(Scan::String, "name");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+
+	spell = scan->getSpell();
+	std::string name = spell;
+	acceptNext(Scan::Comma);
+
+	acceptNext(Scan::String, "data");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+	spell = scan->getSpell();
+	std::string data = spell;
+
+	if (objectManager.isSimpleType(type)) {
+		objectManager.addSimpleTypeVariable(name, type, data);
+	}
+	/*else if (manager.isDefinedType(varType)) {
+		manager.addDefinedTypeVariable(varName, varType, data);
+	}*/
+	else if (objectManager.existsStructureType(type)) {
+		accept(Scan::Array);
+		Structure * structure = objectManager.addStructureVariable(name, type);
+		parseVariableStruct(structure);
+	}
+
+	nexts();
+}

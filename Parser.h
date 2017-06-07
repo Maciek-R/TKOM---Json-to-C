@@ -5,6 +5,7 @@
 #include "ObjectManager.h"
 #include <conio.h>
 #include <vector>
+#include "Structure.h"
 
 
 class Parser
@@ -26,14 +27,26 @@ private:
 	void write(Scan::Type tmp);
 	void error(Scan::Type, Scan::Type);
 
-	void serveVar();
-
 	void accept(Scan::Type);
 	void acceptNext(Scan::Type);
 	void acceptNext(Scan::Type, const char *);
 	void acceptModule();
-	void acceptNewObject();
-	void acceptNewObjectType();
+	void acceptModuleArray();
+	void acceptNewObjects();
+	bool acceptNewObject();
+	void acceptSequenceName();
+	void acceptSequenceFields(Structure*);
+	bool acceptSequenceField(Structure*);
+
+	void acceptArray();
+	void acceptArrayElements();
+	bool acceptArrayElement();
+
+	void acceptVariable();
+	//void acceptVariable();
+	//void acceptArray();
+
+	/*void acceptNewObjectType();
 	void acceptNewStructure();
 	void acceptNewElementOfStructure();
 
@@ -44,7 +57,7 @@ private:
 	void acceptNewStructInArray();
 
 	void acceptNewVariable(std::string);
-	void acceptNewElementOfVariable(std::string, bool);
+	void acceptNewElementOfVariable(std::string, bool);*/
 public:
 	
 	Parser(Scan*);

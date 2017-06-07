@@ -1,5 +1,5 @@
 #include "Parser.h"
-
+/*
 void Parser::acceptNewArray(bool isSimple)
 {
 	bool f = true;
@@ -115,4 +115,4 @@ void Parser::acceptNewElementStructInArray(Model *m)
 	acceptNext(Scan::String, "value");
 	acceptNext(Scan::Value);
 	acceptNext(Scan::String);		m->setStructFieldName(scan->getSpell()); 
-}
+}*/
