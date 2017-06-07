@@ -2,7 +2,7 @@
 #define SCAN_H
 
 #include <iostream>
-
+#include <conio.h>
 #include "Source.h"
 
 class Scan

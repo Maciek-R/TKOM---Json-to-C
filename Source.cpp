@@ -1,9 +1,9 @@
 #include "Source.h"
 
-Source::Source() 
+Source::Source(std::string inputFile) 
 {
 	
-	plik.open("ABC.txt", std::ios::in);
+	plik.open(inputFile, std::ios::in);
 	string line;
 
 	while (getline(plik, line)) {

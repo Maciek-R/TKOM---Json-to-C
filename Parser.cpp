@@ -33,9 +33,14 @@ void Parser::start()
 		}*/
 	//	nexts();
 //	}
-	objectManager.writeAll();
+	
 
 	//tree.write();
+}
+
+void Parser::writeAllToFile(std::string outputFile)
+{
+	objectManager.writeAll(outputFile);
 }
 
 void Parser::nexts()

@@ -13,7 +13,7 @@ private:
 	string jsonString;
 	int i = -1;
 public:
-	Source();
+	Source(std::string inputFile);
 	string getStringFromFile();
 
 	char nextChar();

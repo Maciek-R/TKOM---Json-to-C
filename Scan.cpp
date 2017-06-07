@@ -23,10 +23,12 @@ Scan::Type Scan::nextSymbol() {
 				
 				nextChar();
 				spell[len++] = c;
-				//tu obsluga bledu gdy brakuje "
-				//if (c == '\n') {
-//
-	//			}
+				
+				if (c == '\n') {
+					std::cout << "Missing \"? Line: " << getLine() << std::endl;
+					_getch();
+					exit(0);
+				}
 
 			} while (c != '"');
 

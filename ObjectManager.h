@@ -37,7 +37,7 @@ public:
 	void setVariableData(char*);
 	bool isSimpleType();
 
-	void writeAll();
+	void writeAll(std::string);
 
 	bool checkIfTypeIsExisting(std::string);
 	void addNewType(std::string);

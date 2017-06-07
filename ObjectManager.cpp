@@ -88,10 +88,10 @@ bool ObjectManager::isSimpleType()
 }
 
 
-void ObjectManager::writeAll()
+void ObjectManager::writeAll(std::string outputFile)
 {
 	std::fstream file;
-	file.open("output.txt", std::ios::out);
+	file.open(outputFile, std::ios::out);
 	for (unsigned i = 0; i < models.size(); ++i)
 	{
 		models[i]->write(file);

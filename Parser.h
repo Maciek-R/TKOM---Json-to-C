@@ -52,6 +52,7 @@ public:
 	void nexts();
 
 	void setSpaces();
+	void writeAllToFile(std::string outputFile);
 };
 
 #endif
