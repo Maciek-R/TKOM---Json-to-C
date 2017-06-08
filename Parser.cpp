@@ -79,7 +79,6 @@ void Parser::writeToken(Scan::Type tmp)
 		case Scan::Array:			cout << "[" ; break;
 		case Scan::Value:			cout << ":" ; break;
 		case Scan::String:			cout << "String"; break;
-		case Scan::Number:			cout << "Number" ; break;
 		case Scan::Comma:			cout << "," ; break;
 		case Scan::EndObject:		cout << "}" ; break;
 		case Scan::EndArray:		cout << "]" ; break;

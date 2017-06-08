@@ -21,7 +21,6 @@ Array* Array::clone() {
 
 void Array::write(std::fstream& file) 
 {
-	//strm << m_type->getTypeOutput() << " " << m_variableName << "[" << m_elements.size() << "];" << std::endl;
 	file << this->type->name<< " " << name << "[" << elements.size() << "];\n";
 	for (int i = 0; i < elements.size(); ++i) 
 	{
