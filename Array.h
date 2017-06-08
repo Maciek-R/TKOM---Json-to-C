@@ -3,7 +3,8 @@
 
 #include "Object.h"
 
-class Array : public Object {
+class Array : public Object 
+{
 public:
 
 	Object *type;

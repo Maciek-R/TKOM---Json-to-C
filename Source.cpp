@@ -2,15 +2,21 @@
 
 Source::Source(std::string inputFile) 
 {
-	
-	plik.open(inputFile, std::ios::in);
+	file.open(inputFile, std::ios::in);
+	if (!file.good())
+	{
+		std::cout << "Cannot find file: " << inputFile << std::endl;
+		_getch();
+		exit(0);
+	}
+
 	string line;
 
-	while (getline(plik, line)) {
+	while (getline(file, line)) {
 		jsonString += line;
 		jsonString += '\n';
 	}
-	plik.close();
+	file.close();
 	this->line = 1;
 }
 

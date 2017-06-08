@@ -6,7 +6,8 @@
 #include <fstream>
 #include <iostream>
 
-class Object {
+class Object 
+{
 public:
 	std::string name;
 

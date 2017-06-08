@@ -9,7 +9,7 @@ void Parser::start()
 {
 	acceptModule();
 	
-	std::cout << "Parsowanie zakonczone" << std::endl;
+	std::cout << "Parsing completed." << std::endl;
 }
 
 void Parser::writeAllToFile(std::string outputFile)
@@ -122,19 +122,22 @@ bool Parser::acceptNewObject()
 	acceptNext(Scan::String);
 	spell = scan->getSpell();
 
-	if (strcmp(spell, "sequenceName") == 0){
+	if (strcmp(spell, "sequenceName") == 0)
+	{
 		acceptSequenceName();
 	}
-	else if (strcmp(spell, "array") == 0) {
+	else if (strcmp(spell, "array") == 0) 
+	{
 		acceptArray();
 	}
-	else if (strcmp(spell, "variable") == 0){
+	else if (strcmp(spell, "variable") == 0)
+	{
 		acceptVar();
 	}
-	else {
-		std::cout << "Unexpected type. Expected: sequenceName, array or variable. Line: " << scan->getLine() << std::endl;
-		_getch();
-		exit(0);
+	else 
+	{
+		std::string error = "Unexpected type. Expected: sequenceName, array or variable.";
+		printError(error);
 	}
 
 	accept(Scan::EndObject);
@@ -150,8 +153,10 @@ void Parser::acceptSequenceName()
 	spell = scan->getSpell();
 	std::string type = spell;
 
-	if (objectManager.existsStructureType(type)) {
-		std::cout << "Structure type already defined!" << std::endl;
+	if (objectManager.existsStructureType(type)) 
+	{
+		std::string error = "Structure type \"" + type + "\" already defined!";
+		printError(error);
 	}
 	Structure *structure = new Structure(type);
 
@@ -183,8 +188,10 @@ bool Parser::acceptSequenceField(Structure* structure)
 	spell = scan->getSpell();
 	std::string name = spell;
 
-	if (objectManager.existsStructField(structure, name)) {
-		std::cout <<"Structure field with name: " + name + " already exists." << std::endl;
+	if (objectManager.existsStructField(structure, name)) 
+	{
+		std::string error = "Structure field with name \"" + name + "\" already exists.";
+		printError(error);
 	}
 
 	acceptNext(Scan::Comma);
@@ -337,7 +344,7 @@ bool Parser::acceptVarStructureValue(Structure *structure) {
 	Structure* structInStruct = (Structure*)objectManager.findStructureByField(structure, name);
 	if (structInStruct == nullptr) 
 	{
-		std::string err = "Struct field " + name + " does not exists in " + structure->structType + "\n";
+		std::string err = "Struct field " + name + " does not exists in " + structure->structType;
 		printError(err);
 		
 	}

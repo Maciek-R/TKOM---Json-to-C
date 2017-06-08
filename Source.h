@@ -2,6 +2,8 @@
 #define SOURCE_H
 
 #include<fstream>
+#include<iostream>
+#include<conio.h>
 #include<string>
 
 using namespace std;
@@ -9,7 +11,7 @@ using namespace std;
 class Source
 {
 private:
-	std::fstream plik;
+	std::fstream file;
 	string jsonString;
 	int i = -1;
 public:

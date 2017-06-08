@@ -3,7 +3,8 @@
 
 #include "Object.h"
 
-class SimpleType : public Object {
+class SimpleType : public Object 
+{
 public:
 	std::string type;
 	std::string val;

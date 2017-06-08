@@ -25,9 +25,9 @@ bool ObjectManager::existsStructureType(std::string structureType)
 }
 bool ObjectManager::existsStructField(Structure* structure, std::string name)
 {
-	for (Structure* structure : structures)
+	for (Object* obj : structure->fields)
 	{
-		if (structure->name == name)
+		if (obj->name == name)
 			return true;
 	}
 	return false;

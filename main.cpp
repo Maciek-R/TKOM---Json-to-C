@@ -19,7 +19,6 @@ int main(int argc, char *argv[]) {
 	string inputFile = argv[1];
 	string outputFile = argv[2];
 
-	
 	Source * source = new Source(inputFile);
 	Scan * scan = new Scan(source);
 	Parser * parser = new Parser(scan);
@@ -27,7 +26,7 @@ int main(int argc, char *argv[]) {
 	parser->start();
 
 	parser->writeAllToFile(outputFile);
-	
+	std::cout << "See " << outputFile << " file." << std::endl;
 
 	_getch();
 	return 0;
