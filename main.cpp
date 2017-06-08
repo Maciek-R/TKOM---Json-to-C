@@ -16,6 +16,7 @@ int main(int argc, char *argv[]) {
 		_getch();
 		return -1;
 	}
+
 	string inputFile = argv[1];
 	string outputFile = argv[2];
 

@@ -16,6 +16,7 @@ public:
 	std::string getStructType();
 
 	void setValue(std::string);
+	bool isInitialized();
 
 	void writeDeclaration(std::fstream&);
 	void writeField(std::fstream&);

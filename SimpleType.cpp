@@ -29,10 +29,12 @@ void SimpleType::writeField(std::fstream &file)
 void SimpleType::write(std::fstream& file)
 {
 	std::string quote = type == "string" ? "\"" : "";
-	file << name << " = " << quote << val << quote << ";\n";
+	file << type << " " << name << " = " << quote << val << quote << ";\n";
 }
 void SimpleType::writeFieldValue(std::fstream& file, std::string pref)
 {
+	if (!isInitialized()) return;
+
 	std::string quote = type == "string" ? "\"" : "";
 	file << pref << name + " = " << quote << val << quote << ";\n";
 }
@@ -41,4 +43,8 @@ void SimpleType::writeArrayValue(std::fstream& file, std::string pref)
 {
 	std::string quote = type == "string" ? "\"" : "";
 	file << pref << " = " << quote << this->val << quote << ";\n";
+}
+bool SimpleType::isInitialized()
+{
+	return !val.empty();
 }

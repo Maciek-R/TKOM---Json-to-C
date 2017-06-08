@@ -40,18 +40,6 @@ Scan::Type Scan::nextSymbol() {
 		if (c == ':') {
 			return Value;
 		}
-		if (source->isDigit(c) || c == '-') {
-			int len = 0;
-			do {
-				spell[len++] = c;
-				nextChar();
-			}
-			while (source->isDigit(c));
-
-			spell[--len] = '\0';
-
-			return Number;
-		}
 		if (c == '[') {
 			
 			return Array;

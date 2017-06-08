@@ -19,6 +19,7 @@ public:
 	void writeFieldValue(std::fstream&, std::string);
 	void writeArrayValue(std::fstream&, std::string);
 	void setValue(std::string);
+	bool isInitialized();
 
 };
 #endif

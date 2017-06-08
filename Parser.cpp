@@ -40,6 +40,37 @@ void Parser::error(Scan::Type expected, Scan::Type typed)
 	_getch();
 	exit(0);
 }
+void Parser::checkTypeWithContent(std::string type, std::string data)
+{
+	if (type == "string") return;
+
+	for (size_t i = 0; i < data.size(); ++i)
+		if (!Source::isDigit(data[i]))
+			printError("Uncorrect format of data in variable");
+
+	if (type == "int")
+	{
+		if(data.find('.')!=-1)
+			printError("Uncorrect format of data in variable");
+	}
+	else if (type == "float" || type == "double")
+	{
+		int f = data.find('.');
+		if (f != -1 && (data.find('.', f+1))!=-1)
+			printError("Uncorrect format of data in variable");
+
+		int number;
+		try
+		{
+			int num = std::stoi(data);
+		}
+		catch (exception e)
+		{
+			std::string error = "Uncorrect format of data in variable";
+			printError(error);
+		}
+	}
+}
 void Parser::writeToken(Scan::Type tmp)
 {
 	switch (tmp)
@@ -204,7 +235,8 @@ bool Parser::acceptSequenceField(Structure* structure)
 	std::string type = spell;
 
 	if (!objectManager.existsType(type)) {
-		std::cout << "Structure field type " + type + " doesn't exists" << std::endl;
+		std::string error = "Structure field type \"" + type + "\" doesn't exists";
+		printError(error);
 	}
 	
 	objectManager.addStructureField(structure, name, type);
@@ -221,7 +253,7 @@ void Parser::acceptArray() {
 
 	std::string type = spell;
 	if (!objectManager.existsType(type))
-		printError("This type (" + type + ") does not exists");
+		printError("This type \"" + type + "\" does not exists");
 	acceptNext(Scan::Comma);
 
 	acceptNext(Scan::String, "name");
@@ -234,12 +266,8 @@ void Parser::acceptArray() {
 	acceptNext(Scan::String, "values");
 	acceptNext(Scan::Value);
 
-	
-
 	Array* arr = objectManager.addArrayVariable(name, type);
 	acceptArrayElements(arr);
-
-	
 
 	nexts();
 }
@@ -262,6 +290,7 @@ bool Parser::acceptArrayElement(Array* arr)
 	{
 		spell = scan->getSpell();
 		std::string value = spell;
+		checkTypeWithContent(static_cast<SimpleType *>(arr->type)->type, value);
 		objectManager.addToArraySimpleType(arr, value);
 	}
 	else if (sym == Scan::Array)
@@ -310,6 +339,7 @@ void Parser::acceptVar()
 	if (objectManager.isSimpleType(type)) {
 		spell = scan->getSpell();
 		std::string data = spell;
+		checkTypeWithContent(type, data);
 		objectManager.addSimpleTypeVariable(name, type, data);
 	}
 	else if (objectManager.existsStructureType(type)) {
@@ -346,13 +376,12 @@ bool Parser::acceptVarStructureValue(Structure *structure) {
 	{
 		std::string err = "Struct field " + name + " does not exists in " + structure->structType;
 		printError(err);
-		
 	}
 
 	Object *obj = objectManager.findStructureByField(structure, name);
-	/*if (attrib->hasValue()) {
-		error("Attrib '" + attribName + "' has already been defined.");
-	}*/
+	if (obj->isInitialized()) {
+		printError("Field with name \""+ name + "\" is initialized.");
+	}
 
 	acceptNext(Scan::Comma);
 
@@ -363,6 +392,7 @@ bool Parser::acceptVarStructureValue(Structure *structure) {
 	if (sym == Scan::String) {
 		spell = scan->getSpell();
 		std::string value = spell;
+		checkTypeWithContent(static_cast<SimpleType*>(obj)->type, value);
 		obj->setValue(value);
 	}
 	else if (sym == Scan::Array) {

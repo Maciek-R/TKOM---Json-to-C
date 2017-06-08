@@ -38,3 +38,7 @@ void Array::writeArrayValue(std::fstream& file, std::string pref)
 {}
 void Array::setValue(std::string value)
 {}
+bool Array::isInitialized()
+{
+	return !elements.empty();
+}

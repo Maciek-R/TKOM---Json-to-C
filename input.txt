@@ -12,7 +12,7 @@
 						},
 						{
 							"attrib": "b",
-							"type": "int"
+							"type": "double"
 						}
 					]
 			},
@@ -46,15 +46,15 @@
 			},
 			{
 			
-				"variable": "int",
+				"variable": "double",
 				"name": "zmienna1",
-				"data": "5"
+				"data": "12.3"
 			},
 			{
 			
 				"variable": "string",
 				"name": "zmienna2",
-				"data": "5"
+				"data": " qwerty "
 			},
 			{
 				"variable": "MyStructure",		
@@ -347,7 +347,7 @@
 												},
 												{
 													"attrib": "b",
-													"value": "207"
+													"value": "20.7"
 												}
 											]
 										}

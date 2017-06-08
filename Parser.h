@@ -6,7 +6,7 @@
 #include <conio.h>
 #include <vector>
 #include "Structure.h"
-
+#include <exception>
 
 class Parser
 {
@@ -20,6 +20,7 @@ private:
 	void writeToken(Scan::Type tmp);
 	void Parser::printError(std::string);
 	void error(Scan::Type, Scan::Type);
+	void checkTypeWithContent(std::string, std::string);
 
 	void accept(Scan::Type);
 	void acceptNext(Scan::Type);

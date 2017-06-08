@@ -47,10 +47,7 @@ bool Source::isDigit(char x)
 	if (x >= '0' && x <= '9')
 		return true;
 
-	if (x >= 'a' && x <= 'z' || x >= 'A' && x <= 'Z')
-		return true;
-
-	if (x == '"')
+	if (x == '-' || x=='.')
 		return true;
 
 	return false;

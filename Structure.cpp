@@ -62,3 +62,7 @@ void Structure::writeArrayValue(std::fstream& file, std::string pref)
 		fields[i]->writeFieldValue(file, nestedPref);
 	}
 }
+bool Structure::isInitialized()
+{
+	return false;
+}
