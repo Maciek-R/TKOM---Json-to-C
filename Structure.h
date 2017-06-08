@@ -21,6 +21,8 @@ public:
 	void writeDeclaration(std::fstream&);
 	void writeField(std::fstream&);
 	void writeFieldValue(std::fstream&, std::string);
+	void writeArrayValue(std::fstream&, std::string);
+
 	void write(std::fstream&);
 };
 

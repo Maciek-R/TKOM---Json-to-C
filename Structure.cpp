@@ -54,3 +54,11 @@ void Structure::writeFieldValue(std::fstream& file, std::string pref) {
 		fields[i]->writeFieldValue(file, nestedPref);
 	}
 }
+void Structure::writeArrayValue(std::fstream& file, std::string pref)
+{
+	for(int i = 0; i < fields.size(); ++i) 
+	{
+		std::string nestedPref = pref + ".";
+		fields[i]->writeFieldValue(file, nestedPref);
+	}
+}

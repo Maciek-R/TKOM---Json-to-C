@@ -34,3 +34,8 @@ void SimpleType::writeFieldValue(std::fstream& file, std::string pref)
 {
 	file << pref << name + " = " + val + ";\n";
 }
+
+void SimpleType::writeArrayValue(std::fstream& file, std::string pref)
+{
+	file << pref << " = " << this->val << ";\n";
+}

@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include "Structure.h"
+#include "Array.h"
 #include "SimpleType.h"
 //#include "Var.h"
 //#include "Structure.h"
@@ -34,6 +35,10 @@ public:
 
 	void addSimpleTypeVariable(std::string, std::string, std::string);
 	Structure* addStructureVariable(std::string, std::string);
+
+	Array* addArrayVariable(std::string, std::string);
+	void addToArraySimpleType(Array*, std::string);
+	Structure* addToArrayStructure(Array*);
 
 	bool existsType(std::string);
 	bool isSimpleType(std::string);

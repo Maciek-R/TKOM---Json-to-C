@@ -25,6 +25,7 @@ private:
 	//std::vector <Scan::Type> exps;
 	std::vector <string> expsString;
 	void write(Scan::Type tmp);
+	void Parser::printError(std::string);
 	void error(Scan::Type, Scan::Type);
 
 	void accept(Scan::Type);
@@ -39,8 +40,8 @@ private:
 	bool acceptSequenceField(Structure*);
 
 	void acceptArray();
-	void acceptArrayElements();
-	bool acceptArrayElement();
+	void acceptArrayElements(Array*);
+	bool acceptArrayElement(Array*);
 
 	void acceptVar();
 	void acceptVarStructure(Structure*);

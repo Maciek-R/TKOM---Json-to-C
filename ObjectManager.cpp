@@ -107,7 +107,27 @@ Structure* ObjectManager::addStructureVariable(std::string name, std::string typ
 	return clonedStructure;
 }
 
+Array* ObjectManager::addArrayVariable(std::string name, std::string type)
+{
+	Object *obj = getType(type);
+	obj->name = type;
+	Array* arr = new Array(obj, name);
+	objects.push_back(arr);
+	return arr;
+}
 
+void ObjectManager::addToArraySimpleType(Array* array, std::string value)
+{
+	Object* obj = array->type->clone();
+	obj->setValue(value);
+	array->elements.push_back(obj);
+}
+Structure* ObjectManager::addToArrayStructure(Array* arr)
+{
+	Structure* structure = (Structure*)arr->type->clone();
+	arr->elements.push_back(structure);
+	return structure;
+}
 
 //----------------------------------------------------------------
 

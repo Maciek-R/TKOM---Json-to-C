@@ -3,37 +3,13 @@
 Parser::Parser(Scan * scan)
 {
 	this->scan = scan;
-
-	//exps.push_back(Scan::Object);
 }
 
 void Parser::start()
 {
-
 	acceptModule();
 	
 	std::cout << "Parsowanie zakonczone" << std::endl;
-
-	
-
-	//while (sym != Scan::Type::Error) {
-
-		/*switch (sym) {
-			case Scan::Type::Object:		setSpaces();	++tab;			cout << "Object" << endl;		break;
-			case Scan::Type::Array:		setSpaces();	++tab;			cout << "Array" << endl;		break;
-			case Scan::Type::Value:		setSpaces();					cout << "Value" << endl;		break;
-			case Scan::Type::String:		setSpaces();					cout << "String" << " " << spell << endl;		break;
-			case Scan::Type::Number:		setSpaces();					cout << "Number " << " " << spell << endl;		break;
-			case Scan::Type::Comma:		setSpaces();					cout << "Comma" << endl;		break;
-			case Scan::Type::Error:		setSpaces();					cout << "Error" << endl;		break;
-			case Scan::Type::EndObject:	--tab;			setSpaces();	cout << "EndObject" << endl;	break;
-			case Scan::Type::EndArray:	--tab;			setSpaces();	cout << "EndArray" << endl;		break;
-		}*/
-	//	nexts();
-//	}
-	
-
-	//tree.write();
 }
 
 void Parser::writeAllToFile(std::string outputFile)
@@ -48,9 +24,17 @@ void Parser::nexts()
 
 void Parser::setSpaces()
 {
-	for (int i = 0; i < tab; ++i) {
+	for (int i = 0; i < tab; ++i) 
+	{
 		cout << '\t';
 	}
+}
+void Parser::printError(std::string err)
+{
+	std::cout << err << std::endl;
+	std::cout << "Line: " << scan->getLine() << std::endl;
+	_getch();
+	exit(0);
 }
 void Parser::error(Scan::Type expected, Scan::Type typed)
 {
@@ -156,7 +140,7 @@ bool Parser::acceptNewObject()
 		acceptVar();
 	}
 	else {
-		std::cout << "Niepoprawny typ. Oczekiwano sequenceName, array lub variable. Line: " << scan->getLine() << std::endl;
+		std::cout << "Unexpected type. Expected: sequenceName, array or variable. Line: " << scan->getLine() << std::endl;
 		_getch();
 		exit(0);
 	}
@@ -234,11 +218,13 @@ void Parser::acceptArray() {
 
 	acceptNext(Scan::Value);
 	acceptNext(Scan::String);
-	spell = scan->getSpell();//nie ma tutaj sprawdzania typu???
+	spell = scan->getSpell();
+
 	std::string type = spell;
+	if (!objectManager.existsType(type))
+		printError("This type (" + type + ") does not exists");
 	acceptNext(Scan::Comma);
 
-	//parsePairString(KeyWord::NAME);
 	acceptNext(Scan::String, "name");
 	acceptNext(Scan::Value);
 	acceptNext(Scan::String);
@@ -246,28 +232,26 @@ void Parser::acceptArray() {
 	std::string name = spell;
 	acceptNext(Scan::Comma);
 
-	//values
 	acceptNext(Scan::String, "values");
 	acceptNext(Scan::Value);
 
 	
 
-	//Array * array = manager.addArrayVariable(arrayName, arrayType);
-	//parseArrayElements(array);
-	acceptArrayElements(/*array*/);
+	Array* arr = objectManager.addArrayVariable(name, type);
+	acceptArrayElements(arr);
 
 	
 
 	nexts();
 }
-void Parser::acceptArrayElements(/*array*/)
+void Parser::acceptArrayElements(Array* arr)
 {
 	acceptNext(Scan::Array);
-	while (acceptArrayElement(/*array*/));
+	while (acceptArrayElement(arr));
 	accept(Scan::EndArray);
 }
 
-bool Parser::acceptArrayElement(/*array*/)
+bool Parser::acceptArrayElement(Array* arr)
 {
 	acceptNext(Scan::Object);
 
@@ -278,21 +262,14 @@ bool Parser::acceptArrayElement(/*array*/)
 	if (sym == Scan::String)
 	{
 		spell = scan->getSpell();
-		//manager.addArrayValueSimpleType(array, value);
+		std::string value = spell;
+		objectManager.addToArraySimpleType(arr, value);
 	}
 	else if (sym == Scan::Array)
 	{
-
+		Structure* structure = objectManager.addToArrayStructure(arr);
+		acceptVarStructure(structure);
 	}
-	/*if (symbol.first == NUMBER || symbol.first == STRING) {
-		std::string value = symbol.second;
-		manager.addArrayValueSimpleType(array, value);
-	}
-	else if (symbol.first == ARRAY_BEG) {
-		//recursive - struct in struct
-		Structure *structure = manager.addArrayValueStructure(array);
-		parseVariableStruct(structure);
-	}*/
 
 	acceptNext(Scan::EndObject);
 	nexts();
@@ -307,8 +284,10 @@ void Parser::acceptVar()
 	spell = scan->getSpell();
 	std::string type = spell;
 
-	if (!objectManager.existsType(type)) {
-		std::cout<<"Undeclared variable type: " + type << std::endl;
+	if (!objectManager.existsType(type)) 
+	{
+		std::string err = "Undeclared variable type: " + type +"\n";
+		printError(err);
 	}
 
 	acceptNext(Scan::Comma);
@@ -330,9 +309,6 @@ void Parser::acceptVar()
 		std::string data = spell;
 		objectManager.addSimpleTypeVariable(name, type, data);
 	}
-	/*else if (manager.isDefinedType(varType)) {
-		manager.addDefinedTypeVariable(varName, varType, data);
-	}*/
 	else if (objectManager.existsStructureType(type)) {
 		accept(Scan::Array);
 		Structure * structure = objectManager.addStructureVariable(name, type);
@@ -360,9 +336,11 @@ bool Parser::acceptVarStructureValue(Structure *structure) {
 	std::string name = spell;
 
 	Structure* structInStruct = (Structure*)objectManager.findStructureByField(structure, name);
-	if (structInStruct == nullptr) {
-		std::cout << "Struct field " + name + " does not exists in " + structure->structType << std::endl;
-		//error("Field struct '" + attribName + "' not found in '" + structure->m_structName + "' definition.");
+	if (structInStruct == nullptr) 
+	{
+		std::string err = "Struct field " + name + " does not exists in " + structure->structType + "\n";
+		printError(err);
+		
 	}
 
 	Object *obj = objectManager.findStructureByField(structure, name);
@@ -384,7 +362,6 @@ bool Parser::acceptVarStructureValue(Structure *structure) {
 	else if (sym == Scan::Array) {
 		structInStruct->name = name;
 		acceptVarStructure(structInStruct);
-		//parseVariableStruct(nestedStruct);
 	}
 	else {
 		std::cout << "Error: Missing Quotes?" << std::endl;

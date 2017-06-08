@@ -23,6 +23,10 @@
 						{
 							"attrib": "c",
 							"type": "MyStructure"
+						},
+						{
+							"attrib": "d",
+							"type": "MyStructure"
 						}
 					]
 			},
@@ -129,8 +133,211 @@
 							]
 					}
 				]
+			},
+			{
+				"array": "int",
+				"name" : "myIntArray",
+				"values":
+					[
+						{
+							"value": "80"
+						},
+						{
+							"value": "81"
+						}
+
+					]	
+			},
+			{
+				"array": "MyStructure",
+				"name": "arrayStruct",
+				"values": 
+					[
+						{
+							"value": 
+							[
+								{
+									"attrib": "a",
+									"value": "50"
+								},
+								{
+									"attrib": "b",
+									"value": "51"
+								}
+							]
+						},
+						{
+							"value": 
+							[
+								{
+									"attrib": "a",
+									"value": "100"
+								},
+								{
+									"attrib": "b",
+									"value": "151"
+								}
+							]
+						}
+						
+					]
+			},
+			{
+				"array": "MyComplicatedStruct",
+				"name": "arrayStructInStruct",
+				"values": 
+					[
+						{
+							"value":
+							[
+								{
+									"attrib": "e",
+									"value": 
+									[
+										{
+											"attrib": "c",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "100"
+												},
+												{
+													"attrib": "b",
+													"value": "101"
+												}
+											]
+										},
+										{
+											"attrib": "d",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "101"
+												},
+												{
+													"attrib": "b",
+													"value": "100"
+												}
+											]
+										}
+										
+									]
+								},
+								{
+									"attrib": "f",
+									"value": 
+									[
+										{
+											"attrib": "c",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "102"
+												},
+												{
+													"attrib": "b",
+													"value": "103"
+												}
+											]
+										},
+										{
+											"attrib": "d",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "103"
+												},
+												{
+													"attrib": "b",
+													"value": "102"
+												}
+											]
+										}
+									]
+								}
+							]
+						},
+						{
+							"value":
+							[
+								{
+									"attrib": "e",
+									"value": 
+									[
+										{
+											"attrib": "c",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "200"
+												},
+												{
+													"attrib": "b",
+													"value": "201"
+												}
+											]
+										},
+										{
+											"attrib": "d",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "202"
+												},
+												{
+													"attrib": "b",
+													"value": "203"
+												}
+											]
+										}
+										
+									]
+								},
+								{
+									"attrib": "f",
+									"value": 
+									[
+										{
+											"attrib": "c",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "204"
+												},
+												{
+													"attrib": "b",
+													"value": "205"
+												}
+											]
+										},
+										{
+											"attrib": "d",
+											"value": 
+											[
+												{
+													"attrib": "a",
+													"value": "206"
+												},
+												{
+													"attrib": "b",
+													"value": "207"
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+						
+					]
 			}
-			
 		]
 }	
 			
