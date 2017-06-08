@@ -23,13 +23,6 @@ char Source::nextChar()
 {
 	++i;
 	return jsonString[i];
-	/*if (i < test.length()) {
-		c = test[i];
-		return true;
-	}
-	else {
-		return false;
-	}*/
 }
 bool Source::isWhiteChar(char x) {
 	if (x == ' ' || x == '\t')

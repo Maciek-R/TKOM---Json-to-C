@@ -10,18 +10,16 @@ class Scan
 	private:
 		Source * source;
 		char c;
-		char spell[32];
-		int tab = 0;
+		char spell[128];
 	public:
 
-		enum Type { Object, Array, Value, String, Number, Comma, EndObject, EndArray, Error, ComplexEmpty, END_FILE, None};
+		enum Type { Object, Array, Value, String, Number, Comma, EndObject, EndArray, Error, END_FILE, None};
 		Scan(Source *);
 		Type nextSymbol();
 		void nextChar();
 		char * getSpell();
 		int getLine();
 
-		void setSpaces();
 };
 
 #endif

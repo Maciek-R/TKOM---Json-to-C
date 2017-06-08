@@ -28,14 +28,17 @@ void SimpleType::writeField(std::fstream &file)
 
 void SimpleType::write(std::fstream& file)
 {
-	file << name << " = " << val << ";\n";
+	std::string quote = type == "string" ? "\"" : "";
+	file << name << " = " << quote << val << quote << ";\n";
 }
 void SimpleType::writeFieldValue(std::fstream& file, std::string pref)
 {
-	file << pref << name + " = " + val + ";\n";
+	std::string quote = type == "string" ? "\"" : "";
+	file << pref << name + " = " << quote << val << quote << ";\n";
 }
 
 void SimpleType::writeArrayValue(std::fstream& file, std::string pref)
 {
-	file << pref << " = " << this->val << ";\n";
+	std::string quote = type == "string" ? "\"" : "";
+	file << pref << " = " << quote << this->val << quote << ";\n";
 }

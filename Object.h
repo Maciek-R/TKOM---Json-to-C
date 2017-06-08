@@ -19,7 +19,6 @@ public:
 	virtual void writeFieldValue(std::fstream&, std::string) = 0;
 	virtual void writeArrayValue(std::fstream&, std::string) = 0;
 	virtual void setValue(std::string) = 0;
-	std::string getName();
 };
 
 #endif

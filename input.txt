@@ -8,7 +8,7 @@
 					[
 						{
 							"attrib": "a",
-							"type": "int"
+							"type": "string"
 						},
 						{
 							"attrib": "b",
@@ -48,6 +48,12 @@
 			
 				"variable": "int",
 				"name": "zmienna1",
+				"data": "5"
+			},
+			{
+			
+				"variable": "string",
+				"name": "zmienna2",
 				"data": "5"
 			},
 			{
@@ -144,6 +150,20 @@
 						},
 						{
 							"value": "81"
+						}
+
+					]	
+			},
+			{
+				"array": "string",
+				"name" : "myStringArray",
+				"values":
+					[
+						{
+							"value": "abc"
+						},
+						{
+							"value": "def"
 						}
 
 					]	
@@ -339,5 +359,5 @@
 					]
 			}
 		]
-}	
+}
 			

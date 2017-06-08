@@ -2,9 +2,8 @@
 #define STRUCTURE_H
 
 #include "Object.h"
-#include <string>
 
-class Structure:public Object 
+class Structure : public Object 
 {
 public:
 	std::string structType;

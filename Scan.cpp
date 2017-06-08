@@ -45,7 +45,7 @@ Scan::Type Scan::nextSymbol() {
 			do {
 				spell[len++] = c;
 				nextChar();
-			} //while (c != ' ');
+			}
 			while (source->isDigit(c));
 
 			spell[--len] = '\0';
@@ -67,35 +67,15 @@ Scan::Type Scan::nextSymbol() {
 			
 			return EndArray;
 		}
-		
-
-
-
-
-		//	while (isCharOrDigit(c))
-		//	nextChar();
-
-
-
-
-
-	
 }
 
 char * Scan::getSpell()
 {
 	return spell;
 }
-
 void Scan::nextChar()
 {
 	c = source->nextChar();
-}
-
-void Scan::setSpaces()
-{
-	for (int q = 0; q < tab; ++q)
-		cout << '\t';
 }
 int Scan::getLine()
 {

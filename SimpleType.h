@@ -1,12 +1,11 @@
 #ifndef SIMPLE_TYPE_H
 #define SIMPLE_TYPE_H
 
-#include <fstream>
 #include "Object.h"
 
 class SimpleType : public Object {
 public:
-	std::string type;//int char, double, itp.
+	std::string type;
 	std::string val;
 
 	SimpleType(SimpleType*);

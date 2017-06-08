@@ -22,13 +22,6 @@ void Parser::nexts()
 	sym = scan->nextSymbol();
 }
 
-void Parser::setSpaces()
-{
-	for (int i = 0; i < tab; ++i) 
-	{
-		cout << '\t';
-	}
-}
 void Parser::printError(std::string err)
 {
 	std::cout << err << std::endl;
@@ -39,15 +32,15 @@ void Parser::printError(std::string err)
 void Parser::error(Scan::Type expected, Scan::Type typed)
 {
 	cout << "Unexpected token(";
-	write(typed);
+	writeToken(typed);
 	cout << ").";
 	cout << "Expected: ";
-	write(expected);
+	writeToken(expected);
 	cout << " Line: " << scan->getLine() << endl;
 	_getch();
 	exit(0);
 }
-void Parser::write(Scan::Type tmp)
+void Parser::writeToken(Scan::Type tmp)
 {
 	switch (tmp)
 	{
@@ -60,10 +53,9 @@ void Parser::write(Scan::Type tmp)
 		case Scan::EndObject:		cout << "}" ; break;
 		case Scan::EndArray:		cout << "]" ; break;
 		case Scan::Error:			cout << "error" ; break;
-		case Scan::ComplexEmpty:	cout << "ComplexEmpty" ; break;
 		case Scan::None:			cout << "None"; break;
 		case Scan::END_FILE:		cout << "End_File"; break;
-		default:					cout << "abc";
+		default:					cout << "Unknown";
 	}
 }
 
@@ -270,6 +262,10 @@ bool Parser::acceptArrayElement(Array* arr)
 		Structure* structure = objectManager.addToArrayStructure(arr);
 		acceptVarStructure(structure);
 	}
+	else {
+		std::string err = "Error: Missing Quotes?";
+		printError(err);
+	}
 
 	acceptNext(Scan::EndObject);
 	nexts();
@@ -314,7 +310,10 @@ void Parser::acceptVar()
 		Structure * structure = objectManager.addStructureVariable(name, type);
 		acceptVarStructure(structure);
 	}
-
+	else {
+		std::string err = "Error: Missing Quotes?";
+		printError(err);
+	}
 	nexts();
 }
 void Parser::acceptVarStructure(Structure *structure) {
@@ -364,7 +363,8 @@ bool Parser::acceptVarStructureValue(Structure *structure) {
 		acceptVarStructure(structInStruct);
 	}
 	else {
-		std::cout << "Error: Missing Quotes?" << std::endl;
+		std::string err = "Error: Missing Quotes?";
+		printError(err);
 	}
 
 	acceptNext(Scan::EndObject);
