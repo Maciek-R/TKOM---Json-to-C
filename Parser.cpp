@@ -294,6 +294,8 @@ bool Parser::acceptArrayElement(Array* arr)
 	}
 	else if (sym == Scan::Array)
 	{
+		if (dynamic_cast<Structure*>((arr->type)) == nullptr)
+			printError("There should be SimpleType variable");
 		Structure* structure = objectManager.addToArrayStructure(arr);
 		acceptVarStructure(structure);
 	}

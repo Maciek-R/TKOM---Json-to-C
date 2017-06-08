@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <vector>
 #include "Structure.h"
+#include <typeinfo>
 #include <exception>
 
 class Parser
