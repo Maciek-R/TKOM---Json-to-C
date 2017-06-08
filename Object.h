@@ -16,6 +16,8 @@ public:
 	virtual Object * clone() = 0;
 	virtual void write(std::fstream&) = 0;
 	virtual void writeField(std::fstream&) = 0;
+	virtual void writeFieldValue(std::fstream&, std::string) = 0;
+	virtual void setValue(std::string) = 0;
 	std::string getName();
 };
 

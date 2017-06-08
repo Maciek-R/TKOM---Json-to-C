@@ -16,10 +16,11 @@ public:
 	Structure* clone();
 	std::string getStructType();
 
-
+	void setValue(std::string);
 
 	void writeDeclaration(std::fstream&);
 	void writeField(std::fstream&);
+	void writeFieldValue(std::fstream&, std::string);
 	void write(std::fstream&);
 };
 

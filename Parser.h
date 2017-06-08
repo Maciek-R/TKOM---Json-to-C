@@ -42,7 +42,10 @@ private:
 	void acceptArrayElements();
 	bool acceptArrayElement();
 
-	void acceptVariable();
+	void acceptVar();
+	void acceptVarStructure(Structure*);
+	void acceptVarStructureValues(Structure*);
+	bool acceptVarStructureValue(Structure*);
 	//void acceptVariable();
 	//void acceptArray();
 

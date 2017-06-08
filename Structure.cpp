@@ -14,6 +14,9 @@ Structure::Structure(Structure* structure)
 	
 
 }
+
+void Structure::setValue(std::string) {};
+
 std::string Structure::getStructType()
 {
 	return structType;
@@ -41,5 +44,13 @@ void Structure::writeField(std::fstream& file)
 
 void Structure::write(std::fstream& file)
 {
-
+	file << structType << " " << name << ";" << std::endl;
+	writeFieldValue(file, "");
+}
+void Structure::writeFieldValue(std::fstream& file, std::string pref) {
+	for (int i = 0; i < fields.size(); ++i) 
+	{
+		std::string nestedPref = pref + name + ".";
+		fields[i]->writeFieldValue(file, nestedPref);
+	}
 }

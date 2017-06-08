@@ -53,7 +53,11 @@ Object* ObjectManager::getType(std::string type)
 	}
 	else if (existsStructureType(type))
 	{
-		return findStructure(type)->clone();
+		return findStructureByType(type)->clone();
+	}
+	else {
+		std::cout << "This type: " + type +" does not exists" << std::endl;
+		return nullptr;
 	}
 
 }
@@ -67,7 +71,7 @@ bool ObjectManager::isSimpleType(std::string type)
 	return false;
 }
 
-Structure* ObjectManager::findStructure(std::string type)
+Structure* ObjectManager::findStructureByType(std::string type)
 {
 	for (Structure* structure : structures)
 	{
@@ -76,13 +80,31 @@ Structure* ObjectManager::findStructure(std::string type)
 	}
 	return nullptr;
 }
+Object* ObjectManager::findStructureByField(Structure* structure, std::string name)
+{
+	for (Object* obj : structure->fields)
+	{
+		if (obj->name == name)
+			return obj;
+	}
+	return nullptr;
+}
 
 void ObjectManager::addSimpleTypeVariable(std::string name, std::string type, std::string data)
 {
 	SimpleType *var = new SimpleType(type);
 	var->name = name;
-	var->value = data;
+	var->val = data;
 	objects.push_back(var);
+}
+
+Structure* ObjectManager::addStructureVariable(std::string name, std::string type)
+{
+	Structure *structure = findStructureByType(type);
+	Structure *clonedStructure = structure->clone();
+	clonedStructure->name = name;
+	objects.push_back(clonedStructure);
+	return clonedStructure;
 }
 
 

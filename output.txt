@@ -1,34 +1,26 @@
-typedef struct MySeq
-{
+typedef struct
+{ 
 	int a;
 	int b;
-}
-typedef struct OuterStruct
-{
-	MySeq d;
-	int e;
-}
-typedef struct Struktura
-{
-	int q;
-	int w;
-	int e;
-}
-int myIntArray[2];
-myIntArray[0] = 80;
-myIntArray[1] = 81;
-
-int zmienna1 = 5;
-
-MySeq mySeqArray[2];
-mySeqArray[0].a = 50;
-mySeqArray[0].b = 51;
-mySeqArray[0].c = 52;
-mySeqArray[1].a = 100;
-mySeqArray[1].b = 151;
-mySeqArray[1].c = 253;
-
-MySeq mySeq;
+} MyStructure;
+typedef struct
+{ 
+	MyStructure c;
+} StructInStruct;
+typedef struct
+{ 
+	StructInStruct e;
+	StructInStruct f;
+} MyComplicatedStruct;
+zmienna1 = 5;
+MyStructure mySeq;
 mySeq.a = 10;
 mySeq.b = 11;
-
+StructInStruct structInStruct;
+structInStruct.c.a = 100;
+structInStruct.c.b = 200;
+MyComplicatedStruct complicatedStruct;
+complicatedStruct.e.c.a = 115;
+complicatedStruct.e.c.b = 190;
+complicatedStruct.f.c.a = 120;
+complicatedStruct.f.c.b = 195;

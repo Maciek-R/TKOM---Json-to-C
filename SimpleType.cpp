@@ -2,12 +2,13 @@
 
 SimpleType::SimpleType(SimpleType* simpleType)
 {
-	this->value = simpleType->value;
+	this->val = simpleType->val;
+	this->type = simpleType->type;
 	this->name = simpleType->name;
 }
-SimpleType::SimpleType(std::string value)
+SimpleType::SimpleType(std::string type)
 {
-	this->value = value;
+	this->type = type;
 }
 
 SimpleType* SimpleType::clone() 
@@ -15,12 +16,21 @@ SimpleType* SimpleType::clone()
 	return new SimpleType(this);
 }
 
+void SimpleType::setValue(std::string value)
+{
+	this->val = value;
+}
+
 void SimpleType::writeField(std::fstream &file)
 {
-	file << value << " " << name << ";";
+	file << type << " " << name << ";";
 }
 
 void SimpleType::write(std::fstream& file)
 {
-	file << name << " = " << value << ";\n";
+	file << name << " = " << val << ";\n";
+}
+void SimpleType::writeFieldValue(std::fstream& file, std::string pref)
+{
+	file << pref << name + " = " + val + ";\n";
 }

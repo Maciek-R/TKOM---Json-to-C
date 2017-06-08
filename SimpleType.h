@@ -6,15 +6,18 @@
 
 class SimpleType : public Object {
 public:
+	std::string type;//int char, double, itp.
+	std::string val;
 
 	SimpleType(SimpleType*);
-	SimpleType(std::string value);
+	SimpleType(std::string type);
 
 	SimpleType* clone();
-	std::string value;//int char, double, itp.
+	void setValue(std::string);
 
 	void write(std::fstream&);
-	void SimpleType::writeField(std::fstream&);
+	void writeField(std::fstream&);
+	void writeFieldValue(std::fstream&, std::string);
 };
 
 #endif

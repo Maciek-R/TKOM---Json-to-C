@@ -3,7 +3,7 @@
 	"module":
 		[
 			{
-				"sequenceName": "MySeq",	
+				"sequenceName": "MyStructure",	
 				"fields": 					
 					[
 						{
@@ -16,51 +16,29 @@
 						}
 					]
 			},
-			{	"sequenceName": "OuterStruct",	
-				"fields": 
-					[
-						{
-							"attrib": "d",
-							"type": "MySeq"
-						},
-						{
-							"attrib": "e",
-							"type": "int"
-						}
-					
-					]
-			},
 			{
-				"sequenceName": "Struktura",	
+				"sequenceName": "StructInStruct",	
 				"fields": 					
 					[
 						{
-							"attrib": "q",
-							"type": "int"
-						},
-						{
-							"attrib": "w",
-							"type": "int"
-						},
-						{
-							"attrib": "e",
-							"type": "int"
+							"attrib": "c",
+							"type": "MyStructure"
 						}
 					]
 			},
 			{
-				"array": "int",
-				"name" : "myIntArray",
-				"values":
+				"sequenceName": "MyComplicatedStruct",	
+				"fields": 					
 					[
 						{
-							"value": "80"
+							"attrib": "e",
+							"type": "StructInStruct"
 						},
 						{
-							"value": "81"
+							"attrib": "f",
+							"type": "StructInStruct"
 						}
-
-					]	
+					]
 			},
 			{
 			
@@ -69,51 +47,7 @@
 				"data": "5"
 			},
 			{
-				"array": "MySeq",
-				"name": "mySeqArray",
-				"values": 
-					[
-						{
-							"value": 
-							[
-								{
-									"attrib": "a",
-									"value": "50"
-								},
-								{
-									"attrib": "b",
-									"value": "51"
-								},
-								{
-									"attrib": "c",
-									"value": "52"
-								}
-
-							]
-						},
-						{
-							"value": 
-							[
-								{
-									"attrib": "a",
-									"value": "100"
-								},
-								{
-									"attrib": "b",
-									"value": "151"
-								},
-								{
-									"attrib": "c",
-									"value": "253"
-								}
-
-							]
-						}
-						
-					]
-			},
-			{
-				"variable": "MySeq",		
+				"variable": "MyStructure",		
 				"name": "mySeq",
 				"data":
 				[
@@ -127,7 +61,76 @@
 					}
 				]
 			
+			},
+			{
+				"variable": "StructInStruct",		
+				"name": "structInStruct",
+				"data":
+				[
+					{
+						"attrib": "c",
+						"value":
+							[
+								{
+									"attrib" : "a",
+									"value" : "100"
+								},
+								{
+									"attrib" : "b",
+									"value" : "200"
+								}
+							]
+					}
+				]
+			},
+			{
+				"variable": "MyComplicatedStruct",		
+				"name": "complicatedStruct",
+				"data":
+				[
+					{
+						"attrib": "e",
+						"value":
+							[
+								{
+									"attrib" : "c",
+									"value" :
+									[
+										{
+											"attrib" : "a",
+											"value" : "115"
+										},
+										{
+											"attrib" : "b",
+											"value" : "190"
+										}
+									]
+								}
+							]
+					},
+					{
+						"attrib": "f",
+						"value":
+							[
+								{
+									"attrib" : "c",
+									"value" :
+									[
+										{
+											"attrib" : "a",
+											"value" : "120"
+										},
+										{
+											"attrib" : "b",
+											"value" : "195"
+										}
+									]
+								}
+							]
+					}
+				]
 			}
+			
 		]
 }	
 			

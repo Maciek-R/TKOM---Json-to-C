@@ -153,7 +153,7 @@ bool Parser::acceptNewObject()
 		acceptArray();
 	}
 	else if (strcmp(spell, "variable") == 0){
-		acceptVariable();
+		acceptVar();
 	}
 	else {
 		std::cout << "Niepoprawny typ. Oczekiwano sequenceName, array lub variable. Line: " << scan->getLine() << std::endl;
@@ -299,7 +299,7 @@ bool Parser::acceptArrayElement(/*array*/)
 	return sym == Scan::Comma;
 }
 
-void Parser::acceptVariable()
+void Parser::acceptVar()
 {
 	acceptNext(Scan::Value);
 	acceptNext(Scan::String);
@@ -323,11 +323,11 @@ void Parser::acceptVariable()
 
 	acceptNext(Scan::String, "data");
 	acceptNext(Scan::Value);
-	acceptNext(Scan::String);
-	spell = scan->getSpell();
-	std::string data = spell;
+	nexts();
 
 	if (objectManager.isSimpleType(type)) {
+		spell = scan->getSpell();
+		std::string data = spell;
 		objectManager.addSimpleTypeVariable(name, type, data);
 	}
 	/*else if (manager.isDefinedType(varType)) {
@@ -336,8 +336,62 @@ void Parser::acceptVariable()
 	else if (objectManager.existsStructureType(type)) {
 		accept(Scan::Array);
 		Structure * structure = objectManager.addStructureVariable(name, type);
-		parseVariableStruct(structure);
+		acceptVarStructure(structure);
 	}
 
 	nexts();
+}
+void Parser::acceptVarStructure(Structure *structure) {
+	acceptVarStructureValues(structure);
+	accept(Scan::EndArray);
+}
+void Parser::acceptVarStructureValues(Structure* structure)
+{
+	while (acceptVarStructureValue(structure));
+}
+bool Parser::acceptVarStructureValue(Structure *structure) {
+	acceptNext(Scan::Object);
+
+	acceptNext(Scan::String, "attrib");
+	acceptNext(Scan::Value);
+	acceptNext(Scan::String);
+
+	spell = scan->getSpell();
+	std::string name = spell;
+
+	Structure* structInStruct = (Structure*)objectManager.findStructureByField(structure, name);
+	if (structInStruct == nullptr) {
+		std::cout << "Struct field " + name + " does not exists in " + structure->structType << std::endl;
+		//error("Field struct '" + attribName + "' not found in '" + structure->m_structName + "' definition.");
+	}
+
+	Object *obj = objectManager.findStructureByField(structure, name);
+	/*if (attrib->hasValue()) {
+		error("Attrib '" + attribName + "' has already been defined.");
+	}*/
+
+	acceptNext(Scan::Comma);
+
+	acceptNext(Scan::String, "value");
+	acceptNext(Scan::Value);
+	nexts();
+
+	if (sym == Scan::String) {
+		spell = scan->getSpell();
+		std::string value = spell;
+		obj->setValue(value);
+	}
+	else if (sym == Scan::Array) {
+		structInStruct->name = name;
+		acceptVarStructure(structInStruct);
+		//parseVariableStruct(nestedStruct);
+	}
+	else {
+		std::cout << "Error: Missing Quotes?" << std::endl;
+	}
+
+	acceptNext(Scan::EndObject);
+
+	nexts();
+	return sym == Scan::Comma;
 }

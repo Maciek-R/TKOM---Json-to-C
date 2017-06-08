@@ -24,7 +24,6 @@ private:
 
 
 	Object* getType(std::string);
-	Structure* findStructure(std::string);
 public:
 	ObjectManager();
 
@@ -34,6 +33,7 @@ public:
 	void addStructureField(Structure*, std::string, std::string);
 
 	void addSimpleTypeVariable(std::string, std::string, std::string);
+	Structure* addStructureVariable(std::string, std::string);
 
 	bool existsType(std::string);
 	bool isSimpleType(std::string);
@@ -42,8 +42,8 @@ public:
 
 
 
-
-
+	Structure* findStructureByType(std::string);
+	Object* findStructureByField(Structure*, std::string);
 
 
 
